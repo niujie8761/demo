@@ -41,7 +41,7 @@ class IndexController extends Controller
         if ($email=='baijunyao@baijunyao.com') {
             die('请修改邮箱地址已接收测试邮件');
         }
-        $result=send_email($email,'365集团的正式邮件','下个月开始涨工资啦');
+        $result=send_email($email,'365集团的正式邮件','好好干');
         if ($result['error']==1) {
             p($result);die;
         }
