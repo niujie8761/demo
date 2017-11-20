@@ -33,6 +33,21 @@ class IndexController extends Controller
         echo geetest_chcek_verify($data);
     }
 
+    /**
+     * 发送邮件
+     */
+    public function send_email(){
+        $email=I('post.email');
+        if ($email=='baijunyao@baijunyao.com') {
+            die('请修改邮箱地址已接收测试邮件');
+        }
+        $result=send_email($email,'365集团的正式邮件','下个月开始涨工资啦');
+        if ($result['error']==1) {
+            p($result);die;
+        }
+        $this->success('发送完成',U('Home/Index/index'));
+    }
+
     public function ajax_upload()
     {
         $dir_path =  ajax_upload('/Upload/image');
