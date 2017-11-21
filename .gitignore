@@ -1,4 +1,4 @@
 .idea
 *.log
-Application/Runtime/Cache/.*
+Application/Runtime/
 ThinkPHP
