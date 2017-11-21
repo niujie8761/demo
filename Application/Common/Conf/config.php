@@ -45,12 +45,12 @@ return array(
         'AUTH_USER'      => 'users'                         //用户信息表
     ),
 //***********************************邮件服务器**********************************
-    'EMAIL_FROM_NAME'        => '',   // 发件人
-    'EMAIL_SMTP'             => '',   // smtp
-    'EMAIL_USERNAME'         => '',   // 账号
-    'EMAIL_PASSWORD'         => '',   // 密码  注意: 163和QQ邮箱是授权码；不是登录的密码
-    'EMAIL_SMTP_SECURE'      => '',   // 链接方式 如果使用QQ邮箱；需要把此项改为  ssl
-    'EMAIL_PORT'             => '25', // 端口 如果使用QQ邮箱；需要把此项改为  465
+    'EMAIL_FROM_NAME'        => '牛杰',   // 发件人
+    'EMAIL_SMTP'             => 'smtp.qq.com',   // smtp
+    'EMAIL_USERNAME'         => '1033751979@qq.com',   // 账号
+    'EMAIL_PASSWORD'         => 'xnpkylhaqroabefi',   // 密码  注意: 163和QQ邮箱是授权码；不是登录的密码
+    'EMAIL_SMTP_SECURE'      => 'ssl',   // 链接方式 如果使用QQ邮箱；需要把此项改为  ssl
+    'EMAIL_PORT'             => '465', // 端口 如果使用QQ邮箱；需要把此项改为  465
 //***********************************其他设置**********************************
     'RONG_IS_DEV'            => true,//是否是在开发中
     'RONG_DEV_APP_KEY'       => '8luwapkvu3xwl', //融云开发环境下的key       仅供测试使用

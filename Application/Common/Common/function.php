@@ -554,7 +554,7 @@ function send_email($address,$subject,$content){
     // 设置邮件标题
     $phpmailer->Subject=$subject;
     // 设置邮件正文
-    $phpmailer->Body=$content;
+    $phpmailer->Body='<a href="http://fgjadmin.house365.com">房管家</a>';
     // 发送邮件。
     if(!$phpmailer->Send()) {
         $phpmailererror=$phpmailer->ErrorInfo;

@@ -117,7 +117,7 @@
 </div>
 <div class="box"><h4><a target="_blank" href="http://baijunyao.com/article/80">thinkphp整合系列之webuploader异步预览上传</a></h4>
     <form id="geetest" action="<?php echo U('Home/Index/webuploader');?>" method="post">
-        <div id="upload-5a1296f315836" class="xb-uploader">
+        <div id="upload-5a12e2d050cc6" class="xb-uploader">
     <div class="queueList">
         <div class="placeholder">
             <div class="filePicker"></div>
@@ -144,7 +144,7 @@
 jQuery(function() {
     var $ = jQuery,    // just in case. Make sure it's not an other libaray.
 
-        $wrap = $("#upload-5a1296f315836"),
+        $wrap = $("#upload-5a12e2d050cc6"),
 
         // 图片容器
         $queue = $('<ul class="filelist"></ul>')
@@ -206,11 +206,11 @@ jQuery(function() {
     // 实例化
     uploader = WebUploader.create({
         pick: {
-            id: "#upload-5a1296f315836 .filePicker",
+            id: "#upload-5a12e2d050cc6 .filePicker",
             label: '点击选择文件',
             multiple : true
         },
-        dnd: "#upload-5a1296f315836 .queueList",
+        dnd: "#upload-5a12e2d050cc6 .queueList",
         paste: document.body,
         // accept: {
         //     title: 'Images',
@@ -232,7 +232,7 @@ jQuery(function() {
 
     // 添加“添加文件”的按钮，
     uploader.addButton({
-       id: "#upload-5a1296f315836 .filePicker2",
+       id: "#upload-5a12e2d050cc6 .filePicker2",
        label: '继续添加'
     });
 
@@ -426,7 +426,7 @@ jQuery(function() {
                 text += '，失败' + stats.uploadFailNum + '个';
             }
             if (fileCount==stats.successNum && stats.successNum!=0) {
-                $('#upload-5a1296f315836 .webuploader-element-invisible').remove();
+                $('#upload-5a12e2d050cc6 .webuploader-element-invisible').remove();
             }
         }
 
@@ -468,7 +468,7 @@ jQuery(function() {
 
             case 'ready':
                 $placeHolder.addClass( 'element-invisible' );
-                $( "#upload-5a1296f315836 .filePicker2" ).removeClass( 'element-invisible');
+                $( "#upload-5a12e2d050cc6 .filePicker2" ).removeClass( 'element-invisible');
                 $queue.parent().addClass('filled');
                 $queue.show();
                 $statusBar.removeClass('element-invisible');
@@ -476,7 +476,7 @@ jQuery(function() {
                 break;
 
             case 'uploading':
-                $( "#upload-5a1296f315836 .filePicker2" ).addClass( 'element-invisible' );
+                $( "#upload-5a12e2d050cc6 .filePicker2" ).addClass( 'element-invisible' );
                 $progress.show();
                 $upload.text( '暂停上传' );
                 break;
