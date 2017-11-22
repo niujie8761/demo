@@ -3,13 +3,15 @@ namespace Home\Controller;
 
 
 use Home\Model\AgentModel;
+use Think\Cache\Driver\Redis;
 use Think\Controller;
 
 class IndexController extends Controller
 {
     public function test()
     {
-        //$agentM->addData();
+        $redis = new Redis();
+
     }
     public function index()
     {

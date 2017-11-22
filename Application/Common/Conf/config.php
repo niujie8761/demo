@@ -4,7 +4,7 @@ return array(
     'SHOW_PAGE_TRACE'        => false,                           // 是否显示调试面板
     'URL_CASE_INSENSITIVE'   => false,                           // url区分大小写
     'TAGLIB_BUILD_IN'        => 'Cx,Common\Tag\My',              // 加载自定义标签
-    'LOAD_EXT_CONFIG'        => 'db,alipay,oauth',               // 加载网站设置文件
+    'LOAD_EXT_CONFIG'        => 'db,alipay,redis,oauth',               // 加载网站设置文件
     'TMPL_PARSE_STRING'      => array(                           // 定义常用路径
         '__OSS__'            => OSS_URL,
         '__PUBLIC__'         => OSS_URL.__ROOT__.'/Public',
@@ -67,15 +67,6 @@ return array(
     'RONGLIAN_ACCOUNT_TOKEN' => '', //容联云通讯 主账号token accountToken
     'RONGLIAN_APPID'         => '', //容联云通讯 应用Id appid
     'RONGLIAN_TEMPLATE_ID'   => '', //容联云通讯 模板Id
-//***********************************缓存设置**********************************
-    'DATA_CACHE_PREFIX'      => 'Redis_',      // 缓存前缀
-    'DATA_CACHE_TYPE'        => 'Redis', // 数据缓存类型,
-    'REDIS_HOST'             => '127.0.0.1', // 服务器ip
-    'REDIS_PORT'             => '6379',//端口号
-    'DATA_CACHE_TIMEOUT'     => '300',//超時時間
-    'DATA_CACHE_TIME'        => '10800',
-    'REDIS_PERSISTENT'       =>  false,//是否长连接 false=短连接
-    'REDIS_AUTH'             =>  '',//AUTH认证密码
 
     'ALIOSS_CONFIG'          => array(
         'KEY_ID'             => '', // 阿里云oss key_id

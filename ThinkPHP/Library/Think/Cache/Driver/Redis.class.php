@@ -88,14 +88,61 @@ class Redis extends Cache
         return $result;
     }
 
+    /**
+     * 从左边进入队列并根据名称自动切库
+     *
+     * @param $name
+     * @param $value
+     * @param null $dbName
+     * @return int
+     */
     public function setLPush($name, $value, $dbName = null)
     {
         if(!is_null($dbName)) {
             $this->switchDB($dbName);
         }
-        $name = $this->formatKey($name);
-        $value = $this->formatValue($value);
-        return $this->handler->lPush($name, $value);
+        return $this->handler->lPush($this->formatKey($name), $this->formatValue($value));
+    }
+
+    /**
+     * 从左边弹出队列数据
+     *
+     * @param $name
+     * @param null $dbName
+     * @return string
+     */
+    public function setLPop($name,  $dbName = null)
+    {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        return $this->handler->lPop($this->formatKey($name));
+    }
+
+    /**
+     * 自增
+     *
+     * @param $name
+     * @param null $dbName
+     * @return int
+     */
+    public function setInc($name, $dbName = null)
+    {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        return $this->handler->incr($this->formatKey($name));
+    }
+
+    /**
+     * 设置过期时间
+     *
+     * @param $name
+     * @param $expiration
+     * @return bool
+     */
+    public function setExpire($name, $expiration) {
+        return $this->handler->expire($this->formatKey($name), $expiration);
     }
 
     /**
@@ -120,8 +167,21 @@ class Redis extends Cache
         return (is_array($value) || is_object($value)) ? json_encode($value) : $value;
     }
 
-    public function switchDB() {
-        $this->handler->select();
+    /**
+     * 根据名称自动切库
+     *
+     * @param $dbName
+     */
+    public function switchDB($dbName)
+    {
+        $redisName = C('REDIS_DB_NAME');
+        foreach($redisName as $key => $value) {
+            if($key != $dbName) {
+                continue;
+            }
+            $redisDB = $value;
+        }
+        $this->handler->select($redisDB);
     }
 
     /**
