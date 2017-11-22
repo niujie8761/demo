@@ -8,8 +8,20 @@ use Think\Controller;
 
 class IndexController extends Controller
 {
+    public function login()
+    {
+        $this->display();
+    }
+    public function getVerifyCode() {
+        $verify = new \Think\Verify();
+        $verify->fontSize = 60;
+        $verify->length = 4;
+        $verify->fontttf = '5.ttf';
+        $verify->entry();
+    }
     public function test()
     {
+        echo 123;exit;
         $redis = new Redis();
 
     }
@@ -61,7 +73,7 @@ class IndexController extends Controller
         if ($result['error']==1) {
             p($result);die;
         }
-        $this->success('发送完成',U('Home/Index/index'));
+        $this->success('发送完成',U('Home/index/index'));
     }
 
     public function ajax_upload()

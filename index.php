@@ -22,9 +22,6 @@ define('APP_DEBUG', true);
 // 定义应用目录
 define('APP_PATH', './Application/');
 
-// 定义模板文件默认目录
-define("TMPL_PATH","./tpl/");
-
 // 定义oss的url
 define("OSS_URL","");
 // 引入ThinkPHP入口文件

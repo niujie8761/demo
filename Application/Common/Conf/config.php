@@ -37,9 +37,9 @@ return array(
         'use_only_cookies'   => 0,//是否只开启基于cookies的session的会话方式
     ),
 //***********************************页面设置**************************************
-    'TMPL_EXCEPTION_FILE'    => APP_DEBUG ? THINK_PATH.'Tpl/think_exception.tpl' : './Template/default/Home/Public/404.html',
-    'TMPL_ACTION_ERROR'      => TMPL_PATH.'/Public/dispatch_jump.tpl', // 默认错误跳转对应的模板文件
-    'TMPL_ACTION_SUCCESS'    => TMPL_PATH.'/Public/dispatch_jump.tpl', // 默认成功跳转对应的模板文件
+    'TMPL_EXCEPTION_FILE'    => APP_DEBUG ? THINK_PATH.'Tpl/think_exception.Tpl' : './Template/default/Home/Public/404.html',
+    'TMPL_ACTION_ERROR'      => TMPL_PATH.'/Public/dispatch_jump.Tpl', // 默认错误跳转对应的模板文件
+    'TMPL_ACTION_SUCCESS'    => TMPL_PATH.'/Public/dispatch_jump.Tpl', // 默认成功跳转对应的模板文件
 //***********************************auth设置**********************************
     'AUTH_CONFIG'            => array(
         'AUTH_USER'      => 'users'                         //用户信息表
