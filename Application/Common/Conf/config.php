@@ -45,7 +45,7 @@ return array(
         'AUTH_USER'      => 'users'                         //用户信息表
     ),
 //***********************************邮件服务器**********************************
-    'EMAIL_FROM_NAME'        => '牛杰',   // 发件人
+    'EMAIL_FROM_NAME'        => '杰哥',   // 发件人
     'EMAIL_SMTP'             => 'smtp.qq.com',   // smtp
     'EMAIL_USERNAME'         => '1033751979@qq.com',   // 账号
     'EMAIL_PASSWORD'         => 'xnpkylhaqroabefi',   // 密码  注意: 163和QQ邮箱是授权码；不是登录的密码
@@ -68,10 +68,15 @@ return array(
     'RONGLIAN_APPID'         => '', //容联云通讯 应用Id appid
     'RONGLIAN_TEMPLATE_ID'   => '', //容联云通讯 模板Id
 //***********************************缓存设置**********************************
-    'DATA_CACHE_TIME'        => 1800,        // 数据缓存有效期s
-    'DATA_CACHE_PREFIX'      => 'mem_',      // 缓存前缀
-    'DATA_CACHE_TYPE'        => 'Memcached', // 数据缓存类型,
-    'MEMCACHED_SERVER'       => '127.0.0.1', // 服务器ip
+    'DATA_CACHE_PREFIX'      => 'Redis_',      // 缓存前缀
+    'DATA_CACHE_TYPE'        => 'Redis', // 数据缓存类型,
+    'REDIS_HOST'             => '127.0.0.1', // 服务器ip
+    'REDIS_PORT'             => '6379',//端口号
+    'DATA_CACHE_TIMEOUT'     => '300',//超時時間
+    'DATA_CACHE_TIME'        => '10800',
+    'REDIS_PERSISTENT'       =>  false,//是否长连接 false=短连接
+    'REDIS_AUTH'             =>  '',//AUTH认证密码
+
     'ALIOSS_CONFIG'          => array(
         'KEY_ID'             => '', // 阿里云oss key_id
         'KEY_SECRET'         => '', // 阿里云oss key_secret
@@ -83,20 +88,6 @@ return array(
         '/Upload/cover',
         '/Upload/image/webuploader',
         '/Upload/video',
-    ),
-    'ALIPAY_CONFIG'          => array(
-        'partner'            => '', // partner 从支付宝商户版个人中心获取
-        'seller_email'       => '', // email 从支付宝商户版个人中心获取
-        'key'                => '', // key 从支付宝商户版个人中心获取
-        'sign_type'          => strtoupper(trim('MD5')), // 可选md5  和 RSA
-        'input_charset'      => 'utf-8', // 编码 (固定值不用改)
-        'transport'          => 'http', // 协议  (固定值不用改)
-        'cacert'             => VENDOR_PATH.'Alipay/cacert.pem',  // cacert.pem存放的位置 (固定值不用改)
-        'notify_url'         => 'http://baijunyao.com/Api/Alipay/alipay_notify', // 异步接收支付状态通知的链接
-        'return_url'         => 'http://baijunyao.com/Api/Alipay/alipay_return', // 页面跳转 同步通知 页面路径 支付宝处理完请求后,当前页面自 动跳转到商户网站里指定页面的 http 路径。 (扫码支付专用)
-        'show_url'           => 'http://baijunyao.com/User/Order/index', // 商品展示网址,收银台页面上,商品展示的超链接。 (扫码支付专用)
-        'private_key_path'   => '', //移动端生成的私有key文件存放于服务器的 绝对路径 如果为MD5加密方式；此项可为空 (移动支付专用)
-        'public_key_path'    => '', //移动端生成的公共key文件存放于服务器的 绝对路径 如果为MD5加密方式；此项可为空 (移动支付专用)
     ),
     'WEIXINPAY_CONFIG'       => array(
         'APPID'              => '', // 微信支付APPID

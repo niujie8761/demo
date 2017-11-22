@@ -75,7 +75,7 @@ class Redis extends Cache
         }
         $name = $this->formatKey($name);
         //对数组/对象数据进行缓存处理，保证数据完整性
-        $value = (is_object($value) || is_array($value)) ? json_encode($value) : $value;
+        $value = $this->formatValue($value);
         if (is_int($expire) && $expire) {
             $result = $this->handler->setex($name, $expire, $value);
         } else {
@@ -88,9 +88,40 @@ class Redis extends Cache
         return $result;
     }
 
+    public function setLPush($name, $value, $dbName = null)
+    {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        $name = $this->formatKey($name);
+        $value = $this->formatValue($value);
+        return $this->handler->lPush($name, $value);
+    }
+
+    /**
+     * 格式化key
+     *
+     * @param $key
+     * @return string
+     */
     public function formatKey($key)
     {
-        return md5($this->options['prefix'].$key);
+        return $this->options['prefix'].$key;
+    }
+
+    /**
+     * 格式化value
+     *
+     * @param $value
+     * @return string
+     */
+    public function formatValue($value)
+    {
+        return (is_array($value) || is_object($value)) ? json_encode($value) : $value;
+    }
+
+    public function switchDB() {
+        $this->handler->select();
     }
 
     /**
