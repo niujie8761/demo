@@ -19,30 +19,21 @@
             </li>
             <li class="topC"></li>
             <li class="topD">
-                <ul >
+                <ul>
                     <li>
                         <span class="left">用户名：</span>
                         <span style="left">
                         <input id="u_name" type="text" class="txt" />
                         </span>
                     </li>
-                    <li>
+                    <li style="margin-top:5px;">
                         <span class="left">密 码：</span>
                         <span style="left">
                         <input id="u_pass" type="password" class="txt" />
                         </span>
                     </li>
-                    <li>
-                        <span class="left">验证码：</span>
-                        <span style="left">
-                        <input id="u_identify" type="text" class="txt" />
-                        </span>
-                    </li>
-                    <li>
-                        <span class="left"></span>
-                        <span style="left">
-							<img id="verifyImg" src="<?php echo U('Home/Index/getVerifyCode'); ?>" width="79" height="26"/>
-						</span>
+                    <li style = "margin-top:5px;">
+                        <div id="captcha"></div>
                     </li>
                 </ul>
             </li>
@@ -59,30 +50,56 @@
         </ul>
     </div>
 </form>
+<script src="https://static.geetest.com/static/tools/gt.js"></script>
+<script src="https://api.geetest.com/get.php"></script>
 <script>
+    var handler = function (captchaObj) {
+        // 将验证码加到id为captcha的元素里
+        captchaObj.appendTo("#captcha");
+    };
+    // 获取验证码
+    $.get("<?php echo U('Home/Index/showVerify');?>", function (data) {
+        // 使用initGeetest接口
+        // 参数1：配置参数，与创建Geetest实例时接受的参数一致
+        // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+        initGeetest({
+            gt: data.gt,
+            challenge: data.challenge,
+            product: "float", // 产品形式
+            offline: !data.success
+        }, handler);
+    }, 'json');
+
+    $(document).keyup(function(event){
+        if(event.keyCode == 13) {
+            $("#login_submit").trigger('click');
+        }
+    });
+
     $(function(){
         $('#login_submit').click(function(){
             var name = $('#u_name').val();
             var pass = $('#u_pass').val();
-            var identify = $('#u_identify').val();
-            var url = '/checklogin';
-            $.post('/checklogin',{username:name,password:pass,identify:identify},function(data){
-                if(data['status']==1){
-                    window.location.href='/index';
-                }else if(data['status'] == 2) {
-                    alert('验证码出错');
-                    $("#verifyImg").trigger('click');
+            var postData = {
+                geetest_challenge: $(".geetest_challenge").val(),
+                geetest_validate: $(".geetest_validate").val(),
+                geetest_seccode: $(".geetest_seccode").val()
+            };
+            // 验证是否通过
+            $.post("<?php echo U('Home/Index/ajaxCheck') ?>", postData, function (data) {
+                if (data == 1) {
+                    $.post("<?php echo U('Home/Index/checkLogin')?>",{username:name, password:pass},function(result) {
+                        if(result['status'] == 1) {
+                            window.location.href =  "<?php echo U('Home/Index/index')?>";
+                        }else {
+                            alert(result.msg);
+                            window.location.reload();
+                        }
+                    },'json');
+                }else {
+                    alert('验证失败');
                 }
-                else{
-                    alert('用户登录失败，请重新再试');
-                }
-            },'json');
-        });
-
-        $('#verifyImg').click(function() {
-            var verifyUrl = "<?php echo U('Home/Index/getVerifyCode') ?>";
-            var time = new Date().getTime();
-            $(this).attr('src', verifyUrl+'/'+time);
+            });
         });
     });
 </script>

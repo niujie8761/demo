@@ -326,7 +326,7 @@ php;
      * word：提示文字
      */
     public function _webuploader($tag){
-        $url=isset($tag['url'])?$tag['url']:U('Home/Index/ajax_upload');
+        $url=isset($tag['url'])?$tag['url']:U('Home/index/ajax_upload');
         $name=isset($tag['name'])?$tag['name']:'file_name';
         $word=isset($tag['word'])?$tag['word']:'或将照片拖到这里，单次最多可选300张';
         $id_name='upload-'.uniqid();

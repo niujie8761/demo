@@ -24,6 +24,10 @@ define('APP_PATH', './Application/');
 
 // 定义oss的url
 define("OSS_URL","");
+
+//加载第三方包
+require './vendor/autoload.php';
+
 // 引入ThinkPHP入口文件
 require './ThinkPHP/ThinkPHP.php';
 // 亲^_^ 后面不需要任何代码了 就是如此简单

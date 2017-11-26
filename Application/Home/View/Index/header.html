@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="__PUBLIC__/Home/css/base.css" type="text/css" rel="stylesheet">
+    <script src="__PUBLIC__/Home/js/jquery-1.8.3.min.js"></script>
+</head>
+<body style="background:#095C8C;">
+<div style="height:40px;">
+    <div style="float:left;line-height:40px;font-size:16px;color:#FFFFFF;font-weight:bold;margin-left:10px;">365房管家 管理后台</div>
+    <div style="float:left;line-height:40px;color:#EEEEEE;margin-left:40px;">切换城市：
+        <select id="select_city">
+            <?php
+            foreach ($data as $k=> $v){
+            ?>
+            <option value="<?=$v['city']?>"  <?=$v['city'] == $city ? 'selected' : ''?>><?=$v['city_name']?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <div style="float:right;line-height:40px;color:#DAEAF0;margin-right:10px;">
+        <a href="" target="mainpage" style="color:#FFFFFF;">回到首页</a> &nbsp;
+        欢迎，<?=$userInfo['kam_nickname']?> <a style="color:Red;" href="javascript:void(0);" class="logout">[退出]</a>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#select_city").change(function() {
+            var val = $(this).val();
+            window.location.href = "<?php echo U('Home/Index/changeCity/city/"+val+"')?>";
+        });
+        $(".logout").click(function() {
+            window.parent.location.href = "<?php echo U('Home/Index/logout') ?>";
+        });
+    });
+</script>
+</body>
+</html>

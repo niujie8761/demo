@@ -3,40 +3,158 @@ namespace Home\Controller;
 
 
 use Home\Model\AgentModel;
+use Home\Model\MangerModel;
+use Home\Model\CityModel;
 use Think\Cache\Driver\Redis;
-use Think\Controller;
+use think\geetest\GeetestLib;
 
-class IndexController extends Controller
+class IndexController extends BaseController
 {
     public function login()
     {
         $this->display();
     }
-    public function getVerifyCode() {
-        $verify = new \Think\Verify();
-        $verify->fontSize = 60;
-        $verify->length = 4;
-        $verify->fontttf = '5.ttf';
-        $verify->entry();
-    }
-    public function test()
-    {
-        echo 123;exit;
-        $redis = new Redis();
 
+    /**
+     * 极速验证码显示
+     */
+    public function showVerify()
+    {
+        $geeConfig = C('GEE_CONFIG');
+        $gee = new GeetestLib($geeConfig);
+        $user_id = "test";
+        //预处理接口
+        $status = $gee->pre_process($user_id);
+        session_start();
+        $_SESSION['geetest']=array(
+            'gtserver'=>$status,
+            'user_id'=>$user_id
+        );
+        //获取验证字符串接口
+        echo $gee->get_response_str();exit;
     }
+
+    /**
+     * geetest 验证码验证
+     */
+    public function ajaxCheck() {
+        $data = I('post.');
+        $geeConfig = C('GEE_CONFIG');
+        $gee = new GeetestLib($geeConfig);
+        session_start();
+        $user_id = $_SESSION['geetest']['user_id'];
+        if ($_SESSION['geetest']['gtserver']==1) {
+            //二次验证接口
+            $result=$gee->success_validate($data['geetest_challenge'], $data['geetest_validate'], $data['geetest_seccode'], $user_id);
+            if ($result) {
+                $re = 1;
+            } else{
+                $re = 0;
+            }
+        }else{
+            //本地二次验证接口
+            if ($gee->fail_validate($data['geetest_challenge'],$data['geetest_validate'],$data['geetest_seccode'])) {
+                $re = 1;
+            }else{
+                $re = 0;
+            }
+        }
+        echo $re;
+        exit;
+    }
+
+    public function checkLogin()
+    {
+        $data = I('post.');
+        $condition = array(
+            'kam_username' => $data['username'],
+            'kam_password' => md5($data['password']),
+        );
+        $mangerM = MangerModel::getInstance('manger');
+        $findData = $mangerM->findData($condition);
+        if(!empty($findData)) {
+            session('userInfo', $findData);
+            $result = array('status' => 1, 'msg' => 'ok');
+        }else {
+            $result = array('status' => 0, 'msg' => '用户名或者密码出错');
+        }
+        echo $this->ajaxReturn($result);
+        exit;
+    }
+
     public function index()
     {
         /**
          * @var $agentM AgentModel
          */
-        $agentM = AgentModel::getInstance('agent');
+       /* $agentM = AgentModel::getInstance('agent');
         $data['ag_code'] = '123456';
         $data['ks_id'] = '123';
         $agentM->addData($data);
-        exit;
+        exit;*/
         $this->display();
-       // $this->show('<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} body{ background: #fff; font-family: "微软雅黑"; color: #333;font-size:24px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.8em; font-size: 36px } a,a:hover{color:blue;}</style><div style="padding: 24px 48px;"> <h1>:)</h1><p>欢迎使用 <b>ThinkPHP</b>！</p><br/>版本 V{$Think.version}</div><script type="text/javascript" src="http://ad.topthink.com/Public/static/client.js"></script><thinkad id="ad_55e75dfae343f5a1"></thinkad><script type="text/javascript" src="http://tajs.qq.com/stats?sId=9347272" charset="UTF-8"></script>','utf-8');
+    }
+
+    /**
+     * 头部
+     */
+    public function header()
+    {
+        $cityM = cityModel::getInstance('city');
+        $condition = array('is_open' => 1);
+        $data = $cityM->selectData($condition);
+        $userInfo = $this->userInfo;
+        $cityInfo = $userInfo['kam_role']['city'];
+        $city = $this->city;
+        $keyArr = array();
+        foreach($data as $key => &$value) {
+            if(!in_array($value['city'], $cityInfo)) {
+               unset($data[$key]);
+               continue;
+            }
+            $keyFirst = substr(Ucfirst($value['city']), 0, 1);
+            $value['key'] = $keyFirst;
+            $value['city_name'] = $keyFirst.'  '.$value['city_name'];
+        }
+        foreach($data as $kt => $vt) {
+            $keyArr[] = $vt['key'];
+        }
+        array_multisort($keyArr, SORT_ASC, SORT_STRING, $data);
+        $result = array('data' => $data, 'city' => $city, 'userInfo' => $userInfo);
+        $this->assign($result);
+        $this->display();
+    }
+
+    public function menu()
+    {
+        $this->display();
+    }
+    public function main()
+    {
+        $this->display();
+    }
+
+    /**
+     * 切换城市
+     */
+    public function changeCity()
+    {
+        $city = I('get.city');
+        $canCity = $this->userInfo['kam_role']['city'];
+        if(in_array($city, $canCity)) {
+            session('city', $city);
+        }
+        $this->redirect('Home/Index/index');
+    }
+
+    /**
+     * 退出
+     */
+    public function logout()
+    {
+        session('userInfo', null);
+        session('city', null);
+        $this->redirect('Home/Index/login');
     }
 
     /**

@@ -2,6 +2,35 @@
 
 header("Content-type:text/html;charset=utf-8");
 
+//数据格式由gbk转变为utf-8
+function gbk_to_utf8($data) {
+    $arr = array();
+    if(is_string($data)) {
+        $result = iconv('gbk', 'utf-8', $data);
+        return $result;
+    }else {
+        foreach($data as $key => $value) {
+            $value = gbk_to_utf8($value);
+            $arr[$key] = $value;
+        }
+    }
+    return $arr;
+}
+
+//数据格式由utf-8 转变为gbk
+function utf8_to_gbk($data) {
+    $arr = array();
+    if(is_string($data)) {
+        $result = iconv('utf-8', 'gbk', $data);
+        return $result;
+    }else {
+        foreach($data as $key => $value) {
+            $value = utf8_to_gbk($value);
+            $arr[$key] = $value;
+        }
+    }
+    return $arr;
+}
 //传递数据以易于阅读的样式格式化后输出
 function p($data){
     // 定义样式

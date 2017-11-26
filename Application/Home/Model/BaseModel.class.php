@@ -82,8 +82,29 @@ class BaseModel extends Model{
         if($where == '') {
             return false;
         }else {
-            return $this->where($where)->find();
+            $data = $this->where($where)->find();
+            return $this->outPut($data, 'kam_role');
         }
+    }
+
+    /**
+     * 输出格式化
+     *
+     * @param $data
+     * @param $keys
+     * @return array
+     */
+    public function outPut($data, $keys) {
+        $arr = array();
+        foreach(gbk_to_utf8($data) as $key => $value)
+        {
+            if($key == $keys) {
+                $arr[$key] = unserialize($value);
+            }else {
+                $arr[$key] = $value;
+            }
+        }
+        return $arr;
     }
 
     /**
@@ -108,9 +129,11 @@ class BaseModel extends Model{
      */
     public function selectData($where = '') {
         if ($where == '') {
-            return $this->select();
+            $data = $this->select();
+            return gbk_to_utf8($data);
         } else {
-            return $this->where($where)->select();
+            $data = $this->where($where)->select();
+            return gbk_to_utf8($data);
         }
     }
 }

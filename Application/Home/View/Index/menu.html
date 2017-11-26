@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+    <link href="__PUBLIC__/Home/css/base.css" type="text/css" rel="stylesheet">
+    <script src="__PUBLIC__/Home/js/jquery-1.8.3.min.js"></script>
+</head>
+<body style="background:#8ECDF2;">
+<style type="text/css" >
+    .on {
+        color:#DB4701 !important;
+        font-weight:bold !important;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".menu-lev-2 a").each(function(){
+            $(this).bind("click",function(){
+                $(".menu-lev-2 a").removeClass("on");
+                $(this).addClass("on");
+            });
+        });
+
+    });
+</script>
+<div class="mymenus">
+    <?php foreach ($menus as $key => $_menu) : ?>
+    <?php if( in_array($_menu['kamu_id'],$can_menus) && $_menu['kamu_as_menu'] ) : ?>
+    <?php //if( $_menu['kamu_as_menu'] && bm('admin_manager')->check_Right($_menu['kamu_url']) ) : ?>
+    <div class="menu-lev-<?=$_menu['level_depth']?>">
+        <?php if($_menu['kamu_parent_id']!=0) : ?>
+        <a href="<?=$_menu['kamu_url']?>" target="mainpage"><?=$_menu['kamu_name']?></a>
+        <?php else : ?>
+        <?=$_menu['kamu_name']?>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</div>
+</body>
+</html>
