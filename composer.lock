@@ -1,0 +1,58 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "5aadbb5aac67a9641eabbbf6a1034e1b",
+    "packages": [
+        {
+            "name": "lilwil/geetest",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lilwil/geetest.git",
+                "reference": "80a77c476f603b5fda91edc90e28e1d68445b2f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/lilwil/geetest/80a77c476f603b5fda91edc90e28e1d68445b2f1.zip",
+                "reference": "80a77c476f603b5fda91edc90e28e1d68445b2f1",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "think\\geetest\\": "src/"
+                },
+                "files": [
+                    "src/helper.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "lilwil",
+                    "email": "lilwil@163.com"
+                }
+            ],
+            "description": "Geetest For ThinkPHP5",
+            "time": "2017-01-12 02:22:06"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "lilwil/geetest": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.3.0"
+    },
+    "platform-dev": []
+}
