@@ -480,7 +480,7 @@ class Cx extends TagLib
 
     /**
      * import 标签解析 <import file="Js.Base" />
-     * <import file="Css.Base" type="css" />
+     * <import file="css.Base" type="css" />
      * @access public
      * @param array $tag 标签属性
      * @param string $content  标签内容
@@ -562,7 +562,7 @@ class Cx extends TagLib
         return $this->_import($tag, $content, true);
     }
 
-    // import别名使用 导入css文件 <css file="__PUBLIC__/Css/Base.css" />
+    // import别名使用 导入css文件 <css file="__PUBLIC__/css/Base.css" />
     public function _css($tag, $content)
     {
         return $this->_import($tag, $content, true, 'css');

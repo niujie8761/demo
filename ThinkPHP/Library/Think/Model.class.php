@@ -652,7 +652,6 @@ class Model
                 $resultSet = $cols;
             }
         }
-
         if (isset($cache)) {
             S($key, $resultSet, $cache);
         }

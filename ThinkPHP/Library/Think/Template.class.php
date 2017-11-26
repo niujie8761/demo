@@ -88,7 +88,7 @@ class Template
     {
         $this->tVar        = $templateVar;
         $templateCacheFile = $this->loadTemplate($templateFile, $prefix);
-        Storage::load($templateCacheFile, $this->tVar, null, 'tpl');
+        Storage::load($templateCacheFile, $this->tVar, null, 'Tpl');
     }
 
     /**
@@ -128,7 +128,7 @@ class Template
         }
         // 编译模板内容
         $tmplContent = $this->compiler($tmplContent);
-        Storage::put($tmplCacheFile, trim($tmplContent), 'tpl');
+        Storage::put($tmplCacheFile, trim($tmplContent), 'Tpl');
         return $tmplCacheFile;
     }
 
@@ -300,7 +300,7 @@ class Template
      */
     private function parseXmlAttrs($attrs)
     {
-        $xml = '<tpl><tag ' . $attrs . ' /></tpl>';
+        $xml = '<Tpl><tag ' . $attrs . ' /></Tpl>';
         $xml = simplexml_load_string($xml);
         if (!$xml) {
             E(L('_XML_TAG_ERROR_'));

@@ -1025,11 +1025,11 @@ class FirePHP
             version_compare($m[1][0], '0.0.6', '>=')) {
             return true;
         } else
-        // Check if FirePHP is installed on client via X-FirePHP-Version header
-        if (@preg_match_all('/^([\.\d]*)$/si', $this->getRequestHeader("X-FirePHP-Version"), $m) &&
-            version_compare($m[1][0], '0.0.6', '>=')) {
-            return true;
-        }
+            // Check if FirePHP is installed on client via X-FirePHP-Version header
+            if (@preg_match_all('/^([\.\d]*)$/si', $this->getRequestHeader("X-FirePHP-Version"), $m) &&
+                version_compare($m[1][0], '0.0.6', '>=')) {
+                return true;
+            }
         return false;
     }
 
@@ -1072,36 +1072,36 @@ class FirePHP
 
         if (func_num_args() == 1) {
         } else
-        if (func_num_args() == 2) {
-            switch (func_get_arg(1)) {
-                case self::LOG:
-                case self::INFO:
-                case self::WARN:
-                case self::ERROR:
-                case self::DUMP:
-                case self::TRACE:
-                case self::EXCEPTION:
-                case self::TABLE:
-                case self::GROUP_START:
-                case self::GROUP_END:
-                    $Type = func_get_arg(1);
-                    break;
-                default:
+            if (func_num_args() == 2) {
+                switch (func_get_arg(1)) {
+                    case self::LOG:
+                    case self::INFO:
+                    case self::WARN:
+                    case self::ERROR:
+                    case self::DUMP:
+                    case self::TRACE:
+                    case self::EXCEPTION:
+                    case self::TABLE:
+                    case self::GROUP_START:
+                    case self::GROUP_END:
+                        $Type = func_get_arg(1);
+                        break;
+                    default:
+                        $Label = func_get_arg(1);
+                        break;
+                }
+            } else
+                if (func_num_args() == 3) {
+                    $Type  = func_get_arg(2);
                     $Label = func_get_arg(1);
-                    break;
-            }
-        } else
-        if (func_num_args() == 3) {
-            $Type  = func_get_arg(2);
-            $Label = func_get_arg(1);
-        } else
-        if (func_num_args() == 4) {
-            $Type    = func_get_arg(2);
-            $Label   = func_get_arg(1);
-            $Options = func_get_arg(3);
-        } else {
-            throw $this->newException('Wrong number of arguments to fb() function!');
-        }
+                } else
+                    if (func_num_args() == 4) {
+                        $Type    = func_get_arg(2);
+                        $Label   = func_get_arg(1);
+                        $Options = func_get_arg(3);
+                    } else {
+                        throw $this->newException('Wrong number of arguments to fb() function!');
+                    }
 
         if (null !== $this->logToInsightConsole && (get_class($this) == 'FirePHP_Insight' || is_subclass_of($this, 'FirePHP_Insight'))) {
             $msg = $this->logToInsightConsole;
@@ -1203,68 +1203,68 @@ class FirePHP
             $Type = self::EXCEPTION;
 
         } else
-        if (self::TRACE == $Type) {
+            if (self::TRACE == $Type) {
 
-            $trace = debug_backtrace();
-            if (!$trace) {
-                return false;
-            }
+                $trace = debug_backtrace();
+                if (!$trace) {
+                    return false;
+                }
 
-            for ($i = 0; $i < sizeof($trace); $i++) {
+                for ($i = 0; $i < sizeof($trace); $i++) {
 
-                if (isset($trace[$i]['class'])
-                    && isset($trace[$i]['file'])
-                    && ('FirePHP' == $trace[$i]['class'] || 'FB' == $trace[$i]['class'])
-                    && (substr($this->_standardizePath($trace[$i]['file']), -18, 18) == 'FirePHPCore/fb.php'
-                        || substr($this->_standardizePath($trace[$i]['file']), -29, 29) == 'FirePHPCore/FirePHP.class.php')) {
-                    /* Skip - FB::trace(), FB::send(), $firephp->trace(), $firephp->fb() */
-                } else
-                if (isset($trace[$i]['class'])
-                    && isset($trace[$i + 1]['file'])
-                    && 'FirePHP' == $trace[$i]['class'] && substr($this->_standardizePath($trace[$i + 1]['file']), -18, 18) == 'FirePHPCore/fb.php') {
-                    /* Skip fb() */
-                } else
-                if ('fb' == $trace[$i]['function'] || 'trace' == $trace[$i]['function'] || 'send' == $trace[$i]['function']) {
+                    if (isset($trace[$i]['class'])
+                        && isset($trace[$i]['file'])
+                        && ('FirePHP' == $trace[$i]['class'] || 'FB' == $trace[$i]['class'])
+                        && (substr($this->_standardizePath($trace[$i]['file']), -18, 18) == 'FirePHPCore/fb.php'
+                            || substr($this->_standardizePath($trace[$i]['file']), -29, 29) == 'FirePHPCore/FirePHP.class.php')) {
+                        /* Skip - FB::trace(), FB::send(), $firephp->trace(), $firephp->fb() */
+                    } else
+                        if (isset($trace[$i]['class'])
+                            && isset($trace[$i + 1]['file'])
+                            && 'FirePHP' == $trace[$i]['class'] && substr($this->_standardizePath($trace[$i + 1]['file']), -18, 18) == 'FirePHPCore/fb.php') {
+                            /* Skip fb() */
+                        } else
+                            if ('fb' == $trace[$i]['function'] || 'trace' == $trace[$i]['function'] || 'send' == $trace[$i]['function']) {
 
-                    $Object = array('Class' => isset($trace[$i]['class']) ? $trace[$i]['class'] : '',
-                        'Type'                  => isset($trace[$i]['type']) ? $trace[$i]['type'] : '',
-                        'Function'              => isset($trace[$i]['function']) ? $trace[$i]['function'] : '',
-                        'Message'               => $trace[$i]['args'][0],
-                        'File'                  => isset($trace[$i]['file']) ? $this->_escapeTraceFile($trace[$i]['file']) : '',
-                        'Line'                  => isset($trace[$i]['line']) ? $trace[$i]['line'] : '',
-                        'Args'                  => isset($trace[$i]['args']) ? $this->encodeObject($trace[$i]['args']) : '',
-                        'Trace'                 => $this->_escapeTrace(array_splice($trace, $i + 1)));
+                                $Object = array('Class' => isset($trace[$i]['class']) ? $trace[$i]['class'] : '',
+                                    'Type'                  => isset($trace[$i]['type']) ? $trace[$i]['type'] : '',
+                                    'Function'              => isset($trace[$i]['function']) ? $trace[$i]['function'] : '',
+                                    'Message'               => $trace[$i]['args'][0],
+                                    'File'                  => isset($trace[$i]['file']) ? $this->_escapeTraceFile($trace[$i]['file']) : '',
+                                    'Line'                  => isset($trace[$i]['line']) ? $trace[$i]['line'] : '',
+                                    'Args'                  => isset($trace[$i]['args']) ? $this->encodeObject($trace[$i]['args']) : '',
+                                    'Trace'                 => $this->_escapeTrace(array_splice($trace, $i + 1)));
+
+                                $skipFinalObjectEncode = true;
+                                $meta['file']          = isset($trace[$i]['file']) ? $this->_escapeTraceFile($trace[$i]['file']) : '';
+                                $meta['line']          = isset($trace[$i]['line']) ? $trace[$i]['line'] : '';
+                                break;
+                            }
+                }
+
+            } else
+                if (self::TABLE == $Type) {
+
+                    if (isset($Object[0]) && is_string($Object[0])) {
+                        $Object[1] = $this->encodeTable($Object[1]);
+                    } else {
+                        $Object = $this->encodeTable($Object);
+                    }
 
                     $skipFinalObjectEncode = true;
-                    $meta['file']          = isset($trace[$i]['file']) ? $this->_escapeTraceFile($trace[$i]['file']) : '';
-                    $meta['line']          = isset($trace[$i]['line']) ? $trace[$i]['line'] : '';
-                    break;
-                }
-            }
 
-        } else
-        if (self::TABLE == $Type) {
+                } else
+                    if (self::GROUP_START == $Type) {
 
-            if (isset($Object[0]) && is_string($Object[0])) {
-                $Object[1] = $this->encodeTable($Object[1]);
-            } else {
-                $Object = $this->encodeTable($Object);
-            }
+                        if (!$Label) {
+                            throw $this->newException('You must specify a label for the group!');
+                        }
 
-            $skipFinalObjectEncode = true;
-
-        } else
-        if (self::GROUP_START == $Type) {
-
-            if (!$Label) {
-                throw $this->newException('You must specify a label for the group!');
-            }
-
-        } else {
-            if (null === $Type) {
-                $Type = self::LOG;
-            }
-        }
+                    } else {
+                        if (null === $Type) {
+                            $Type = self::LOG;
+                        }
+                    }
 
         if ($this->options['includeLineNumbers']) {
             if (!isset($meta['file']) || !isset($meta['line'])) {
@@ -1279,19 +1279,19 @@ class FirePHP
                             || substr($this->_standardizePath($trace[$i]['file']), -29, 29) == 'FirePHPCore/FirePHP.class.php')) {
                         /* Skip - FB::trace(), FB::send(), $firephp->trace(), $firephp->fb() */
                     } else
-                    if (isset($trace[$i]['class'])
-                        && isset($trace[$i + 1]['file'])
-                        && 'FirePHP' == $trace[$i]['class'] && substr($this->_standardizePath($trace[$i + 1]['file']), -18, 18) == 'FirePHPCore/fb.php') {
-                        /* Skip fb() */
-                    } else
-                    if (isset($trace[$i]['file'])
-                        && substr($this->_standardizePath($trace[$i]['file']), -18, 18) == 'FirePHPCore/fb.php') {
-                        /* Skip FB::fb() */
-                    } else {
-                        $meta['file'] = isset($trace[$i]['file']) ? $this->_escapeTraceFile($trace[$i]['file']) : '';
-                        $meta['line'] = isset($trace[$i]['line']) ? $trace[$i]['line'] : '';
-                        break;
-                    }
+                        if (isset($trace[$i]['class'])
+                            && isset($trace[$i + 1]['file'])
+                            && 'FirePHP' == $trace[$i]['class'] && substr($this->_standardizePath($trace[$i + 1]['file']), -18, 18) == 'FirePHPCore/fb.php') {
+                            /* Skip fb() */
+                        } else
+                            if (isset($trace[$i]['file'])
+                                && substr($this->_standardizePath($trace[$i]['file']), -18, 18) == 'FirePHPCore/fb.php') {
+                                /* Skip FB::fb() */
+                            } else {
+                                $meta['file'] = isset($trace[$i]['file']) ? $this->_escapeTraceFile($trace[$i]['file']) : '';
+                                $meta['line'] = isset($trace[$i]['line']) ? $trace[$i]['line'] : '';
+                                break;
+                            }
                 }
             }
         } else {
@@ -1572,128 +1572,128 @@ class FirePHP
             return '** ' . (string) $Object . ' **';
 
         } else
-        if (is_object($Object)) {
+            if (is_object($Object)) {
 
-            if ($ObjectDepth > $this->options['maxObjectDepth']) {
-                return '** Max Object Depth (' . $this->options['maxObjectDepth'] . ') **';
-            }
-
-            foreach ($this->objectStack as $refVal) {
-                if ($refVal === $Object) {
-                    return '** Recursion (' . get_class($Object) . ') **';
-                }
-            }
-            array_push($this->objectStack, $Object);
-
-            $return['__className'] = $class = get_class($Object);
-            $class_lower           = strtolower($class);
-
-            $reflectionClass = new ReflectionClass($class);
-            $properties      = array();
-            foreach ($reflectionClass->getProperties() as $property) {
-                $properties[$property->getName()] = $property;
-            }
-
-            $members = (array) $Object;
-
-            foreach ($properties as $plain_name => $property) {
-
-                $name = $raw_name = $plain_name;
-                if ($property->isStatic()) {
-                    $name = 'static:' . $name;
-                }
-                if ($property->isPublic()) {
-                    $name = 'public:' . $name;
-                } else
-                if ($property->isPrivate()) {
-                    $name     = 'private:' . $name;
-                    $raw_name = "\0" . $class . "\0" . $raw_name;
-                } else
-                if ($property->isProtected()) {
-                    $name     = 'protected:' . $name;
-                    $raw_name = "\0" . '*' . "\0" . $raw_name;
+                if ($ObjectDepth > $this->options['maxObjectDepth']) {
+                    return '** Max Object Depth (' . $this->options['maxObjectDepth'] . ') **';
                 }
 
-                if (!(isset($this->objectFilters[$class_lower])
-                    && is_array($this->objectFilters[$class_lower])
-                    && in_array($plain_name, $this->objectFilters[$class_lower]))) {
-
-                    if (array_key_exists($raw_name, $members)
-                        && !$property->isStatic()) {
-
-                        $return[$name] = $this->encodeObject($members[$raw_name], $ObjectDepth + 1, 1, $MaxDepth + 1);
-
-                    } else {
-                        if (method_exists($property, 'setAccessible')) {
-                            $property->setAccessible(true);
-                            $return[$name] = $this->encodeObject($property->getValue($Object), $ObjectDepth + 1, 1, $MaxDepth + 1);
-                        } else
-                        if ($property->isPublic()) {
-                            $return[$name] = $this->encodeObject($property->getValue($Object), $ObjectDepth + 1, 1, $MaxDepth + 1);
-                        } else {
-                            $return[$name] = '** Need PHP 5.3 to get value **';
-                        }
+                foreach ($this->objectStack as $refVal) {
+                    if ($refVal === $Object) {
+                        return '** Recursion (' . get_class($Object) . ') **';
                     }
-                } else {
-                    $return[$name] = '** Excluded by Filter **';
                 }
-            }
+                array_push($this->objectStack, $Object);
 
-            // Include all members that are not defined in the class
-            // but exist in the object
-            foreach ($members as $raw_name => $value) {
+                $return['__className'] = $class = get_class($Object);
+                $class_lower           = strtolower($class);
 
-                $name = $raw_name;
-
-                if ("\0" == $name{0}) {
-                    $parts = explode("\0", $name);
-                    $name  = $parts[2];
+                $reflectionClass = new ReflectionClass($class);
+                $properties      = array();
+                foreach ($reflectionClass->getProperties() as $property) {
+                    $properties[$property->getName()] = $property;
                 }
 
-                $plain_name = $name;
+                $members = (array) $Object;
 
-                if (!isset($properties[$name])) {
-                    $name = 'undeclared:' . $name;
+                foreach ($properties as $plain_name => $property) {
+
+                    $name = $raw_name = $plain_name;
+                    if ($property->isStatic()) {
+                        $name = 'static:' . $name;
+                    }
+                    if ($property->isPublic()) {
+                        $name = 'public:' . $name;
+                    } else
+                        if ($property->isPrivate()) {
+                            $name     = 'private:' . $name;
+                            $raw_name = "\0" . $class . "\0" . $raw_name;
+                        } else
+                            if ($property->isProtected()) {
+                                $name     = 'protected:' . $name;
+                                $raw_name = "\0" . '*' . "\0" . $raw_name;
+                            }
 
                     if (!(isset($this->objectFilters[$class_lower])
                         && is_array($this->objectFilters[$class_lower])
                         && in_array($plain_name, $this->objectFilters[$class_lower]))) {
 
-                        $return[$name] = $this->encodeObject($value, $ObjectDepth + 1, 1, $MaxDepth + 1);
+                        if (array_key_exists($raw_name, $members)
+                            && !$property->isStatic()) {
+
+                            $return[$name] = $this->encodeObject($members[$raw_name], $ObjectDepth + 1, 1, $MaxDepth + 1);
+
+                        } else {
+                            if (method_exists($property, 'setAccessible')) {
+                                $property->setAccessible(true);
+                                $return[$name] = $this->encodeObject($property->getValue($Object), $ObjectDepth + 1, 1, $MaxDepth + 1);
+                            } else
+                                if ($property->isPublic()) {
+                                    $return[$name] = $this->encodeObject($property->getValue($Object), $ObjectDepth + 1, 1, $MaxDepth + 1);
+                                } else {
+                                    $return[$name] = '** Need PHP 5.3 to get value **';
+                                }
+                        }
                     } else {
                         $return[$name] = '** Excluded by Filter **';
                     }
                 }
-            }
 
-            array_pop($this->objectStack);
+                // Include all members that are not defined in the class
+                // but exist in the object
+                foreach ($members as $raw_name => $value) {
 
-        } elseif (is_array($Object)) {
+                    $name = $raw_name;
 
-            if ($ArrayDepth > $this->options['maxArrayDepth']) {
-                return '** Max Array Depth (' . $this->options['maxArrayDepth'] . ') **';
-            }
+                    if ("\0" == $name{0}) {
+                        $parts = explode("\0", $name);
+                        $name  = $parts[2];
+                    }
 
-            foreach ($Object as $key => $val) {
+                    $plain_name = $name;
 
-                // Encoding the $GLOBALS PHP array causes an infinite loop
-                // if the recursion is not reset here as it contains
-                // a reference to itself. This is the only way I have come up
-                // with to stop infinite recursion in this case.
-                if ('GLOBALS' == $key && is_array($val)
-                    && array_key_exists('GLOBALS', $val)) {
-                    $val['GLOBALS'] = '** Recursion (GLOBALS) **';
+                    if (!isset($properties[$name])) {
+                        $name = 'undeclared:' . $name;
+
+                        if (!(isset($this->objectFilters[$class_lower])
+                            && is_array($this->objectFilters[$class_lower])
+                            && in_array($plain_name, $this->objectFilters[$class_lower]))) {
+
+                            $return[$name] = $this->encodeObject($value, $ObjectDepth + 1, 1, $MaxDepth + 1);
+                        } else {
+                            $return[$name] = '** Excluded by Filter **';
+                        }
+                    }
                 }
 
-                $return[$key] = $this->encodeObject($val, 1, $ArrayDepth + 1, $MaxDepth + 1);
-            }
-        } else {
-            if (self::isUtf8($Object)) {
-                return $Object;
+                array_pop($this->objectStack);
+
+            } elseif (is_array($Object)) {
+
+                if ($ArrayDepth > $this->options['maxArrayDepth']) {
+                    return '** Max Array Depth (' . $this->options['maxArrayDepth'] . ') **';
+                }
+
+                foreach ($Object as $key => $val) {
+
+                    // Encoding the $GLOBALS PHP array causes an infinite loop
+                    // if the recursion is not reset here as it contains
+                    // a reference to itself. This is the only way I have come up
+                    // with to stop infinite recursion in this case.
+                    if ('GLOBALS' == $key && is_array($val)
+                        && array_key_exists('GLOBALS', $val)) {
+                        $val['GLOBALS'] = '** Recursion (GLOBALS) **';
+                    }
+
+                    $return[$key] = $this->encodeObject($val, 1, $ArrayDepth + 1, $MaxDepth + 1);
+                }
             } else {
-                return utf8_encode($Object);
+                if (self::isUtf8($Object)) {
+                    return $Object;
+                } else {
+                    return utf8_encode($Object);
+                }
             }
-        }
         return $return;
     }
 
@@ -1838,16 +1838,16 @@ class FirePHP
                 // return a UTF-16 character from a 2-byte UTF-8 char
                 // see: http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                 return chr(0x07 & (ord($utf8{0}) >> 2))
-                . chr((0xC0 & (ord($utf8{0}) << 6))
-                     | (0x3F & ord($utf8{1})));
+                    . chr((0xC0 & (ord($utf8{0}) << 6))
+                        | (0x3F & ord($utf8{1})));
 
             case 3:
                 // return a UTF-16 character from a 3-byte UTF-8 char
                 // see: http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                 return chr((0xF0 & (ord($utf8{0}) << 4))
-                     | (0x0F & (ord($utf8{1}) >> 2)))
-                . chr((0xC0 & (ord($utf8{1}) << 6))
-                     | (0x7F & ord($utf8{2})));
+                        | (0x0F & (ord($utf8{1}) >> 2)))
+                    . chr((0xC0 & (ord($utf8{1}) << 6))
+                        | (0x7F & ord($utf8{2})));
         }
 
         // ignoring UTF-32 for now, sorry

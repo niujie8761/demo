@@ -80,7 +80,7 @@ class TagLib
     {
         //XML解析安全过滤
         $attr = str_replace('&', '___', $attr);
-        $xml  = '<tpl><tag ' . $attr . ' /></tpl>';
+        $xml  = '<Tpl><tag ' . $attr . ' /></Tpl>';
         $xml  = simplexml_load_string($xml);
         if (!$xml) {
             E(L('_XML_TAG_ERROR_') . ' : ' . $attr);
