@@ -31,6 +31,44 @@ function utf8_to_gbk($data) {
     }
     return $arr;
 }
+
+/**
+ * 将分类按照等级处理
+ *
+ * @param array $categories
+ * @param int $parent_id
+ * @param int $level
+ * @param int $inchildren
+ * @return array
+ */
+function tree_categories($categories, $parent_id = 0, $level = 1, $inchildren = 1, $parent_key='parent_id', $id_key='id'){
+    if (empty($categories)) {
+        return array();
+    }
+    $return_data = array();
+    foreach ($categories as $key => $category){
+        if ($category[$parent_key] == $parent_id) {
+            $category['level_depth'] = $level;
+            unset($categories[$key]);
+            $children = tree_categories($categories, $category[$id_key], $level+1, $inchildren, $parent_key, $id_key);
+            if ( !empty($children) ) {
+                if ($inchildren == 0) {
+                    $return_data[] = $category;
+                    $return_data = array_merge($return_data,$children);
+                }else {
+                    $category['children'] = $children;
+                    $return_data[] = $category;
+                }
+            }else {
+                $return_data[] = $category;
+            }
+        }
+    }
+    return $return_data;
+}
+
+
+
 //传递数据以易于阅读的样式格式化后输出
 function p($data){
     // 定义样式

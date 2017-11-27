@@ -1,10 +1,11 @@
 <?php
-namespace Home\Controller;
 
+namespace Home\Controller;
 
 use Home\Model\AgentModel;
 use Home\Model\MangerModel;
 use Home\Model\CityModel;
+use Home\Model\MenuModel;
 use Think\Cache\Driver\Redis;
 use think\geetest\GeetestLib;
 
@@ -125,10 +126,25 @@ class IndexController extends BaseController
         $this->display();
     }
 
+    /**
+     * 菜单栏
+     */
     public function menu()
     {
+        $redis = new Redis();
+        $menus = $redis->get('menus');
+        if(empty($menus)) {
+            $condition = array('isdel' => 0);
+            $menuM = MenuModel::getInstance('menu');
+            $menus = $menuM->selectData($condition);
+        }
+        $canMenus = $this->userInfo['kam_role']['menu'];
+        $menus = tree_categories($menus,0,1,0,'kamu_parent_id','kamu_id');
+        $result = array('menus' => $menus, 'canMenus' => $canMenus);
+        $this->assign($result);
         $this->display();
     }
+
     public function main()
     {
         $this->display();

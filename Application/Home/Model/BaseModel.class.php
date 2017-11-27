@@ -26,7 +26,7 @@ class BaseModel extends Model{
     }
 
     /**
-     * Ôö¼Ó
+     * å¢åŠ 
      *
      * @param array $data
      *
@@ -40,7 +40,7 @@ class BaseModel extends Model{
     }
 
     /**
-     * É¾³ı
+     * åˆ é™¤
      *
      * @param string $where
      *
@@ -54,7 +54,7 @@ class BaseModel extends Model{
     }
 
     /**
-     * ĞŞ¸Ä
+     * ä¿®æ”¹
      *
      * @param array $data
      * @param string $where
@@ -72,7 +72,7 @@ class BaseModel extends Model{
     }
 
     /**
-     * ²éÕÒÊı¾İ £¨1Ìõ£©
+     * æŸ¥æ‰¾æ•°æ® ï¼ˆ1æ¡ï¼‰
      *
      * @param string $where
      * @return bool|mixed
@@ -88,7 +88,7 @@ class BaseModel extends Model{
     }
 
     /**
-     * Êä³ö¸ñÊ½»¯
+     * è¾“å‡ºæ ¼å¼åŒ–
      *
      * @param $data
      * @param $keys
@@ -108,7 +108,7 @@ class BaseModel extends Model{
     }
 
     /**
-     * ²éÕÒÊı¾İÊıÁ¿
+     * æŸ¥æ‰¾æ•°æ®æ•°é‡
      *
      * @param string $where
      * @return mixed
@@ -122,7 +122,7 @@ class BaseModel extends Model{
     }
 
     /**
-     * ²éÕÒÊı¾İ
+     * æŸ¥æ‰¾æ•°æ®
      *
      * @param string $where
      * @return mixed
