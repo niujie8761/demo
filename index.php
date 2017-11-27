@@ -25,6 +25,7 @@ define('APP_PATH', './Application/');
 // 定义oss的url
 define("OSS_URL","");
 
+define('BIND_MODULE', 'Home');
 //加载第三方包
 require './vendor/autoload.php';
 
