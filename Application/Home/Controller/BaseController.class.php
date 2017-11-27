@@ -19,16 +19,25 @@ class BaseController extends Controller
 {
     protected $userInfo;
     protected $city = 'nj';
+    protected $controller;
+    protected $action;
 
     public function __construct() {
         parent::__construct();
-        if(!empty(session('userInfo'))) {
-            $this->userInfo = session('userInfo');
-        }
-        if(!empty(session('city'))) {
-            $this->city = session('city');
-        }else {
-            $this->city = $this->userInfo['kam_city'];
+        $this->controller = CONTROLLER_NAME;
+        $this->action  = ACTION_NAME;
+        $auth = array('login', 'showVerify', 'ajaxCheck', 'checkLogin');
+        if(!in_array($this->action, $auth)) {
+            if(!empty(session('userInfo'))) {
+                $this->userInfo = session('userInfo');
+            }else {
+                 $this->redirect('Home/Index/login');
+            }
+            if(!empty(session('city'))) {
+                $this->city = session('city');
+            }else {
+                $this->city = $this->userInfo['kam_city'];
+            }
         }
     }
 }

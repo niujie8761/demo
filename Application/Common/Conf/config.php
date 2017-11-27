@@ -1,8 +1,16 @@
 <?php
 return array(
+
+//*****************************url重写************************************
+    'MODULE_ALLOW_LIST' => array('Home'),
+    'DEFAULT_MODULE'  => 'Home',
+    'URL_MODEL' => 2,
+    'URL_CASE_INSENSITIVE' => false,
+
+
 //*************************************附加设置***********************************
     'SHOW_PAGE_TRACE'        => false,                           // 是否显示调试面板
-    'URL_CASE_INSENSITIVE'   => false,                           // url区分大小写
+   // 'URL_CASE_INSENSITIVE'   => false,                           // url区分大小写
     'TAGLIB_BUILD_IN'        => 'Cx,Common\Tag\My',              // 加载自定义标签
     'LOAD_EXT_CONFIG'        => 'db,alipay,redis,oauth',               // 加载网站设置文件
     'TMPL_PARSE_STRING'      => array(                           // 定义常用路径
@@ -25,10 +33,7 @@ return array(
         '__APP_JS__'         => __ROOT__.trim(TMPL_PATH,'.').'App/Public/js',
         '__APP_IMAGES__'     => OSS_URL.trim(TMPL_PATH,'.').'App/Public/images'
     ),
-//***********************************URL设置**************************************
-    'MODULE_ALLOW_LIST'      => array('Home','Admin','Api','User','App'), //允许访问列表
-    'URL_HTML_SUFFIX'        => '',  // URL伪静态后缀设置
-    'URL_MODEL'              => 1,  //启用rewrite
+
 //***********************************SESSION设置**********************************
     'SESSION_OPTIONS'        => array(
         'name'               => 'BJYADMIN',//设置session名
