@@ -21,7 +21,7 @@
         <td><?=$_menu['kamu_url']?></td>
         <td><?=$_menu['kamu_as_menu']==1?'<font color="Green">是</font>':'<font color="Red">否</font>'?></td>
         <td><?=$_menu['position']?></td>
-        <td><a class="edit" href="#" <!--onclick="fill_menu_form(<?/*=$key*/?>);return false;"--> 编辑</a> | <a class="delete" href="/menu/admin_delete?id=<?=$_menu['kamu_id']?>">删除</a></td>
+        <td><a class="edit" href="javascript:void(0);" data-id="<?php echo $_menu['kamu_id'];?>">编辑</a> | <a class="delete" href="/menu/admin_delete?id=<?=$_menu['kamu_id']?>">删除</a></td>
     </tr>
     <?php endforeach; ?>
 </table>
@@ -47,7 +47,7 @@
                 <th style="width:25%;">父集菜单：</th><td>
                 <select class="select" name="kamu_parent_id" id="menu_parent">
                     <option value="0">作为父菜单使用</option>
-                    <?php foreach ($top_menus as $_menu) : ?>
+                    <?php foreach ($topMenus as $_menu) : ?>
                     <option value="<?=$_menu['kamu_id']?>"><?=$_menu['kamu_name']?></option>
                     <?php endforeach; ?>
                 </select>
@@ -74,9 +74,35 @@
     $(document).ready(function() {
        $(".add-auth").on('click', function() {
            var top = $(window).height();
-
+           var width = $(window).width();
+           $("#J_add_menu").css({"top":(top/2-100)+"px", "left":(width/2-280)+"px"});
            $("#J_add_menu").show();
-       })
+        });
+        $(".close").on('click', function() {
+            $("#J_add_menu").hide();
+        });
+        $(".edit").on('click', function() {
+            var top = $(window).height();
+            var width = $(window).width();
+            var id = $(this).attr("data-id");
+            $("#menu_id").val(id);
+            $.ajax({
+                url : "<?php echo U('menu/ajaxMenu'); ?>",
+                data: {"kamu_id" : id},
+                dataType: "json",
+                type : "post",
+                success: function(result) {
+                    $("#menu_name").val(result.kamu_name);
+                    $("#menu_url").val(result.kamu_url);
+                    $("#menu_position").val(result.position);
+                    $("#menu_parent options").each(function() {
+                        alert($(this).val());
+                    });
+                }
+            });
+            $("#J_add_menu").css({"top":(top/2-100)+"px", "left":(width/2-280)+"px"});
+            $("#J_add_menu").show();
+        });
     });
     //添加的编辑权限设置
  /*   $(document).ready(function() {

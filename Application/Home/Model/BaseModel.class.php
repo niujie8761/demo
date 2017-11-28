@@ -36,6 +36,7 @@ class BaseModel extends Model{
         if (empty($data)) {
             return FALSE;
         }
+        $data = utf8_to_gbk($data);
         return $this->add($data);
     }
 
@@ -135,5 +136,18 @@ class BaseModel extends Model{
             $data = $this->where($where)->select();
             return gbk_to_utf8($data);
         }
+    }
+
+    /**
+     *
+     * 查找数据按顺序排列
+     *
+     * @param string $where
+     * @param string $order
+     * @return array|string
+     */
+    public function orderData($where = "", $order = "") {
+        $data = $this->where($where)->order($order)->select();
+        return gbk_to_utf8($data);
     }
 }
