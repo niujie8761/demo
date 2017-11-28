@@ -1,0 +1,54 @@
+<layout name="layout/main" />
+<div class="pageTitle">
+    <div class="title">账号角色管理——用户管理</div>
+</div>
+<ul class="optionList">
+    <li><a href="/user/role_save"><span class="icon-add"></span>添加新的角色</a></li>
+</ul>
+
+<!--搜索面板-->
+<form method="GET" action="/user/role" class="search_pad">
+    <div class="search_case clearfix">
+        <div class="search_case_title">角色类型：</div>
+        <div class="search_case_cond">
+            <a href="" class="<?=!isset($_GET['type'])?'selected':''?>">全部</a>
+            <a href="" class="<?=isset($_GET['type'])&&$_GET['type']==0?'selected':''?>">管理后台</a>
+            <a href="" class="<?=isset($_GET['type'])&&$_GET['type']==1?'selected':''?>">开发商</a>
+            <a href="" class="<?=isset($_GET['type'])&&$_GET['type']==2?'selected':''?>">经纪人</a>
+        </div>
+    </div>
+    <div class="search_case clearfix">
+        <div class="search_case_title">状态：</div>
+        <div class="search_case_cond">
+            <a href="" class="<?=!isset($_GET['status'])?'selected':''?>">全部</a>
+            <a href="" class="<?=isset($_GET['status'])&&$_GET['status']==0?'selected':''?>">未激活</a>
+            <a href="" class="<?=$_GET['status']==1?'selected':''?>">激活</a>
+        </div>
+    </div>
+</form>
+
+<table width="100%" class="tableList">
+    <tr>
+        <th width="40">ID</th>
+        <th>角色（<font color="Green">绿色代表激活状态</font>）</th>
+        <th width="100">类型</th>
+        <th>操作</th>
+    </tr>
+    <?php  ?>
+    <?php foreach ($role as $key => $_role) { ?>
+    <tr>
+        <td><?=$_role['id']?></td>
+        <td><?=$_role['status']?'<font color="Green">':'<font color="Red">'?><?=$_role['name']?></font></td>
+        <td><?=$_role['type'] == 0 ? '管理后台' :'分站管理' ?></td>
+        <td>
+            <a class="edit" href = "{:U('user/roleSave', array('id' => $_role['id']))}">编辑</a> |
+            <a class="delete" href = "{:U('user/roleDelete', array('id' => $_role['id']))}">删除</a> |
+            <a class="operate" href="{:U('user/roleRight', array('id' => $_role['id']))}">权限</a>
+        </td>
+    </tr>
+    <?php } ?>
+</table>
+
+<div class="pages" style="margin-top:8px;">
+    {$page}
+</div>

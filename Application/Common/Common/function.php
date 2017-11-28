@@ -67,6 +67,23 @@ function tree_categories($categories, $parent_id = 0, $level = 1, $inchildren = 
     return $return_data;
 }
 
+/**
+ * @param $count 要分页的总记录数
+ * @param int $pagesize 每页查询条数
+ * @return \Think\Page
+ */
+function getPage($count, $pageSize = 10) {
+    $p = new Think\Page($count, $pageSize);
+    $p->setConfig('header', '<li class="rows">共<b>%TOTAL_ROW%</b>条记录 第<b>%NOW_PAGE%</b>页/共<b>%TOTAL_PAGE%</b>页</li>');
+    $p->setConfig('prev', '上一页');
+    $p->setConfig('next', '下一页');
+    $p->setConfig('last', '末页');
+    $p->setConfig('first', '首页');
+    $p->setConfig('theme', '%FIRST%%UP_PAGE%%LINK_PAGE%%DOWN_PAGE%%END%%HEADER%');
+    $p->lastSuffix = false;//最后一页不显示为总页数
+    return $p;
+}
+
 
 
 //传递数据以易于阅读的样式格式化后输出

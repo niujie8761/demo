@@ -135,8 +135,9 @@ class IndexController extends BaseController
         $menus = $redis->get('menus');
         if(empty($menus)) {
             $condition = array('isdel' => 0);
+            $order = array('position desc');
             $menuM = MenuModel::getInstance('menu');
-            $menus = $menuM->selectData($condition);
+            $menus = $menuM->orderData($condition, $order);
         }
         $canMenus = $this->userInfo['kam_role']['menu'];
         $menus = tree_categories($menus,0,1,0,'kamu_parent_id','kamu_id');

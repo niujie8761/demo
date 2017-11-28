@@ -21,13 +21,14 @@
         <td><?=$_menu['kamu_url']?></td>
         <td><?=$_menu['kamu_as_menu']==1?'<font color="Green">是</font>':'<font color="Red">否</font>'?></td>
         <td><?=$_menu['position']?></td>
-        <td><a class="edit" href="javascript:void(0);" data-id="<?php echo $_menu['kamu_id'];?>">编辑</a> | <a class="delete" href="/menu/admin_delete?id=<?=$_menu['kamu_id']?>">删除</a></td>
+        <td><a class="edit" href="javascript:void(0);" data-id="<?php echo $_menu['kamu_id'];?>">编辑</a> | <a class="deletes">删除</a></td>
     </tr>
     <?php endforeach; ?>
 </table>
 <style>
-    #J_add_menu{position:absolute;top:0;left:0;width:600px;height:300px;background:#FFFFFF;z-index:2;border:2px solid #318631;}
+    #J_add_menu{position:fixed;top:0;left:0;width:600px;height:300px;background:#FFFFFF;z-index:2;border:2px solid #318631;}
     #J_add_menu .close{color: red;cursor: pointer;display: block;float: right;font-size: 12px;margin: 5px;}
+    .deletes{cursor:pointer}
 </style>
 <div id="J_add_menu" style="display:none;">
     <span class="close">关闭</span>
@@ -81,6 +82,7 @@
         $(".close").on('click', function() {
             $("#J_add_menu").hide();
         });
+        //编辑
         $(".edit").on('click', function() {
             var top = $(window).height();
             var width = $(window).width();
@@ -95,95 +97,45 @@
                     $("#menu_name").val(result.kamu_name);
                     $("#menu_url").val(result.kamu_url);
                     $("#menu_position").val(result.position);
-                    $("#menu_parent options").each(function() {
-                        alert($(this).val());
+                    $("#menu_parent option").each(function() {
+                        if($(this).val() == result.kamu_parent_id) {
+                            $(this).prop("selected", true);
+                        }
+                    });
+                    $("#menu_as option").each(function() {
+                        if($(this).val() == result.kamu_as_menu) {
+                            $(this).prop("selected", true);
+                        }
                     });
                 }
             });
             $("#J_add_menu").css({"top":(top/2-100)+"px", "left":(width/2-280)+"px"});
             $("#J_add_menu").show();
         });
-    });
-    //添加的编辑权限设置
- /*   $(document).ready(function() {
-        $(".edit").on('click', function() {
-            var obj = $(this);
-            var kamu_id = obj.parents('tr').children('td').eq(0).html();
-            $.ajax({
-                url : '/menu/admin_ajax',
-                type : "post",
-                data : {kamu_id: kamu_id},
-                dataType : "json",
-                success: function(result) {
-                    $("#menu_id").val(result.kamu_id);
-                    $("#menu_name").val(result.kamu_name);
-                    $("#menu_url").val(result.kamu_url);
-                    $("#menu_position").val(result.position);
-                    $("#menu_parent option").each(function() {
-                        if($(this).val() == result.kamu_parent_id) {
-                            $(this).prop('selected',true);
+        //删除
+        $(".deletes").on("click", function() {
+            var id = $(this).parent("td").find("a").eq(0).attr("data-id");
+            layer.open({
+                content : "您确定要删除吗",
+                btn: ['确认', '取消'],
+                shadeClose : false,
+                yes: function() {
+                    $.ajax({
+                        url : "<?php echo U('menu/adminDelete')?>",
+                        type : 'post',
+                        dataType : 'json',
+                        data : {kamu_id: id},
+                        success : function(result) {
+                            layer.alert(result.msg, function() {
+                               window.location.reload();
+                            });
                         }
-                    });
-                    $("#menu_as option").each(function() {
-                        if($(this).val() == result.kamu_as_menu) {
-                            $(this).prop('selected', true);
-                        }
-                    });
-                    var width = ($(window).width()-600)/2+'px';
-                    var height = ($(window).height() - 300)/2+'px';
-                    $("#J_add_menu").css({top:height, left:width});
-                    $("#J_add_menu").show();
+                    })
+                },
+                no : function() {
+                    layer.close();
                 }
             });
         });
     });
-
-    //这种写法遇到的很少
-    var menus = new Array();
-    <?php foreach ($menus as $key => $val):?>
-    menus['<?=$key?>'] = new Array();
-    <?php foreach ($val as $key2 => $val2):?>
-    <?php $val2 = str_replace(array('"',"\r\n","\n"),array('\"','\n','\n'),$val2) ?>
-    menus['<?=$key?>']['<?=$key2?>'] = "<?=$val2?>";
-    <?php endforeach;?>
-    <?php endforeach;?>
-
-    //表单数据JS填充
-    function fill_menu_form(key){
-        //变量赋值
-        var menu_name = '';
-        var menu_url = '';
-        var menu_parent = 0;
-        var menu_as = 1;
-        var menu_id = 0;
-        var menu_position = 10000;
-        if( key!=-1 ){
-            menu_name = menus[key]['kamu_name'];
-            menu_url = menus[key]['kamu_url'];
-            menu_parent = menus[key]['kamu_parent_id'];
-            menu_as = menus[key]['kamu_as_menu'];
-            menu_id = menus[key]['kamu_id'];
-            menu_position = menus[key]['position'];
-        }
-        $('#menu_name').val(menu_name);
-        $('#menu_url').val(menu_url);
-        $('#menu_parent').val(menu_parent);
-        $('#menu_as').val(menu_as);
-        $('#menu_id').val(menu_id);
-        $('#menu_position').val(menu_position);
-
-        //模块展示
-        var win_w = $(window).width();
-        var win_h = $(window).height();
-        var top = (win_h-300)/2;
-        var left = (win_w-600)/2;
-        $('#J_add_menu').css({top:top+'px',left:left+'px'});
-        $('#J_add_menu').show();
-        return false;
-    }
-    $(function(){
-        $('#J_add_menu .close').click(function(){
-            $('#J_add_menu').hide();
-        });
-    });*/
 </script>

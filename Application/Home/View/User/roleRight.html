@@ -1,0 +1,58 @@
+<layout name="layout/main"/>
+<div class="pageTitle">
+    <div class="title">角色(<b><?=$role['name'] ?></b>)权限设置</div>
+</div>
+<form method="POST" action="/user/role_rights">
+    <input type="hidden" name="id" value="<?=$role['id'] ?>">
+    <?php if($role['type']==0) : ?>
+
+    <?php foreach ($menus as $key => $_parent) : ?>
+    <div class="role_class">
+        <input type="checkbox" name="rights[]" value="<?=$_parent['kamu_id']?>" <?=$role['rights']&&in_array($_parent['kamu_id'],$role['rights'])?'checked':''?>><?=$_parent['kamu_name']?>
+        <a class="edit" href="#" onclick="$(this).prevAll('input').attr('checked',true);$(this).parent().next().find('input').attr('checked',true);return false;" style="font-size:12px;font-weight:normal">全选</a>
+    </div>
+    <?php if($_parent['children']) : ?>
+    <ul class="clearfix memus">
+        <?php foreach ($_parent['children'] as $_child) : ?>
+        <li><input type="checkbox" name="rights[]" value="<?=$_child['kamu_id']?>" <?=$role['rights']&&in_array($_child['kamu_id'],$role['rights'])?'checked':''?>><?=$_child['kamu_name']?></li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+    <?php endforeach; ?>
+
+    <?php elseif($role['type']==1) : ?>
+
+    <?php foreach ($menus as $key => $_parent) : ?>
+    <div class="role_class">
+        <input type="checkbox" name="rights[]" value="<?=$_parent['kkmu_id']?>" <?=$role['rights']&&in_array($_parent['kkmu_id'],$role['rights'])?'checked':''?>><?=$_parent['kkmu_name']?>
+        <a class="edit" href="#" onclick="$(this).prevAll('input').attr('checked',true);$(this).parent().next().find('input').attr('checked',true);return false;" style="font-size:12px;font-weight:normal">全选</a>
+    </div>
+    <?php if($_parent['children']) : ?>
+    <ul class="clearfix memus">
+        <?php foreach ($_parent['children'] as $_child) : ?>
+        <li><input type="checkbox" name="rights[]" value="<?=$_child['kkmu_id']?>" <?=$role['rights']&&in_array($_child['kkmu_id'],$role['rights'])?'checked':''?>><?=$_child['kkmu_name']?></li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+    <?php endforeach; ?>
+
+    <?php elseif($role['type']==2) : ?>
+
+    <?php foreach ($menus as $key => $_parent) : ?>
+    <div class="role_class">
+        <input type="checkbox" name="rights[]" value="<?=$_parent['kjmu_id']?>" <?=$role['rights']&&in_array($_parent['kjmu_id'],$role['rights'])?'checked':''?>><?=$_parent['kjmu_name']?>
+        <a class="edit" href="#" onclick="$(this).prevAll('input').attr('checked',true);$(this).parent().next().find('input').attr('checked',true);return false;" style="font-size:12px;font-weight:normal">全选</a>
+    </div>
+    <?php if($_parent['children']) : ?>
+    <ul class="clearfix memus">
+        <?php foreach ($_parent['children'] as $_child) : ?>
+        <li><input type="checkbox" name="rights[]" value="<?=$_child['kjmu_id']?>" <?=$role['rights']&&in_array($_child['kjmu_id'],$role['rights'])?'checked':''?>><?=$_child['kjmu_name']?></li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+    <?php endforeach; ?>
+
+    <?php endif; ?>
+    <br>
+    <input type="submit" class="submit" value="设置权限">
+</form>

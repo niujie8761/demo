@@ -51,7 +51,7 @@ class BaseModel extends Model{
         if (empty($where)) {
             return FALSE;
         }
-        return $this->where($where)->delete();
+        return $this->where($where)->save(array('isdel' => 1));
     }
 
     /**
@@ -65,6 +65,7 @@ class BaseModel extends Model{
         if(empty($data)) {
             return false;
         }
+        $data = utf8_to_gbk($data);
         if(empty($where)) {
             return $this->save($data);
         }else {
@@ -148,6 +149,12 @@ class BaseModel extends Model{
      */
     public function orderData($where = "", $order = "") {
         $data = $this->where($where)->order($order)->select();
+        return gbk_to_utf8($data);
+    }
+
+    public function pageData($where = "", $firstRow = "", $listRows="", $order="")
+    {
+        $data = $this->where($where)->order($order)->limit($firstRow, $listRows)->select();
         return gbk_to_utf8($data);
     }
 }
