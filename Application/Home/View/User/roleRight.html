@@ -2,7 +2,7 @@
 <div class="pageTitle">
     <div class="title">角色(<b><?=$role['name'] ?></b>)权限设置</div>
 </div>
-<form method="POST" action="/user/role_rights">
+<form method="POST" action="{:U('user/roleRight')}">
     <input type="hidden" name="id" value="<?=$role['id'] ?>">
     <?php if($role['type']==0) : ?>
 

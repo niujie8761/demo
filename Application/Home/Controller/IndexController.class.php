@@ -72,7 +72,7 @@ class IndexController extends BaseController
             'kam_password' => md5($data['password']),
         );
         $mangerM = MangerModel::getInstance('manger');
-        $findData = $mangerM->findData($condition);
+        $findData = $mangerM->findData($condition, 'kam_role');
         if(!empty($findData)) {
             session('userInfo', $findData);
             $result = array('status' => 1, 'msg' => 'ok');

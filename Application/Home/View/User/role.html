@@ -3,26 +3,28 @@
     <div class="title">账号角色管理——用户管理</div>
 </div>
 <ul class="optionList">
-    <li><a href="/user/role_save"><span class="icon-add"></span>添加新的角色</a></li>
+    <li><a href="{:U('user/roleSave')}"><span class="icon-add"></span>添加新的角色</a></li>
 </ul>
-
+<style>
+    .deletes{cursor:pointer}
+</style>
 <!--搜索面板-->
-<form method="GET" action="/user/role" class="search_pad">
+<form method="GET" action="" class="search_pad" id="form">
     <div class="search_case clearfix">
         <div class="search_case_title">角色类型：</div>
         <div class="search_case_cond">
-            <a href="" class="<?=!isset($_GET['type'])?'selected':''?>">全部</a>
-            <a href="" class="<?=isset($_GET['type'])&&$_GET['type']==0?'selected':''?>">管理后台</a>
-            <a href="" class="<?=isset($_GET['type'])&&$_GET['type']==1?'selected':''?>">开发商</a>
-            <a href="" class="<?=isset($_GET['type'])&&$_GET['type']==2?'selected':''?>">经纪人</a>
+            <a href="javascript:Filter('roleType', '');" class="<?=!isset($_GET['type'])?'selected':''?>">全部</a>
+            <a href="javascript:Filter('roleType', 0);" class="<?=isset($_GET['type'])&&$_GET['type']==0?'selected':''?>">管理后台</a>
+            <a href="javascript:Filter('roleType', 1);" class="<?=isset($_GET['type'])&&$_GET['type']==1?'selected':''?>">开发商</a>
+            <a href="javascript:Filter('roleType', 2);" class="<?=isset($_GET['type'])&&$_GET['type']==2?'selected':''?>">经纪人</a>
         </div>
     </div>
     <div class="search_case clearfix">
         <div class="search_case_title">状态：</div>
         <div class="search_case_cond">
-            <a href="" class="<?=!isset($_GET['status'])?'selected':''?>">全部</a>
-            <a href="" class="<?=isset($_GET['status'])&&$_GET['status']==0?'selected':''?>">未激活</a>
-            <a href="" class="<?=$_GET['status']==1?'selected':''?>">激活</a>
+            <a href="javascript:Filter('roleStatus', '');" class="<?=!isset($_GET['status'])?'selected':''?>">全部</a>
+            <a href="javascript:Filter('roleStatus', 0);" class="<?=isset($_GET['status'])&&$_GET['status']==0?'selected':''?>">未激活</a>
+            <a href="javascript:Filter('roleStatus', 1);" class="<?=$_GET['status']==1?'selected':''?>">激活</a>
         </div>
     </div>
 </form>
@@ -42,7 +44,7 @@
         <td><?=$_role['type'] == 0 ? '管理后台' :'分站管理' ?></td>
         <td>
             <a class="edit" href = "{:U('user/roleSave', array('id' => $_role['id']))}">编辑</a> |
-            <a class="delete" href = "{:U('user/roleDelete', array('id' => $_role['id']))}">删除</a> |
+            <a class="deletes" data-id="<?php echo $_role['id']?>" >删除</a> |
             <a class="operate" href="{:U('user/roleRight', array('id' => $_role['id']))}">权限</a>
         </td>
     </tr>
@@ -52,3 +54,86 @@
 <div class="pages" style="margin-top:8px;">
     {$page}
 </div>
+<script>
+    var typeP = "<?php echo $type; ?>";
+    var statusP = "<?php echo $status; ?>";
+    var url = "<?php echo U('user/role')?>";
+    if(typeP != "") {
+         url += '/type/'+ typeP;
+    }
+    if(statusP != "") {
+        url += '/status/' + statusP;
+    }
+    function Filter(param1, param2) {
+        var existType = url.indexOf("type");
+        var existStatus = url.indexOf("status");
+        //url 里面有没有type status,没有的话执行下面，有的话替换里面的值
+        if(existType < 0 && existStatus < 0) {
+            if(param1 == 'roleType') {
+                url += '/type/'+param2;
+            }
+            if(param1 == 'roleStatus') {
+                url += '/status/'+param2;
+            }
+        }else if(existType > 0 && existStatus < 0) {
+            if(param1 == 'roleType') {
+                url = url.substr(0, url.length - 1)+param2;
+            }
+            if(param1 == 'roleStatus') {
+                url += '/status/'+param2;
+            }
+        }else if(existType < 0 && existStatus > 0) {
+            if(param1 == 'roleType') {
+                url += '/type/'+param2;
+            }
+            if(param1 == 'roleStatus') {
+                url = url.substr(0, url.length - 1)+param2;
+            }
+        }else if(existType > 0 && existStatus > 0) {
+            var arr = new Array(7);
+            var arrs = new Array(7);
+            if(param1 == 'roleType') {
+                arr = url.split('/');
+                arrs[0] = arr[0];
+                arrs[1] = arr[1];
+                arrs[2] = arr[2];
+                arrs[3] = arr[3];
+                arrs[4] = param2;
+                arrs[5] = arr[5];
+                arrs[6] = arr[6];
+                url = arrs.join("/");
+            }
+            if(param1 == 'roleStatus') {
+                url = url.substr(0, url.length -1)+param2;
+            }
+        }
+        $(".search_pad").attr('action', url);
+        $("#form").submit();
+    }
+
+    //删除
+    $(".deletes").on("click", function() {
+        var id = $(this).attr("data-id");
+        layer.open({
+            content : "您确定要删除吗",
+            btn: ['确认', '取消'],
+            shadeClose : false,
+            yes: function() {
+                $.ajax({
+                    url : "<?php echo U('user/roleDelete')?>",
+                    type : 'post',
+                    dataType : 'json',
+                    data : {roleId: id},
+                    success : function(result) {
+                        layer.alert(result.msg, function() {
+                            window.location.reload();
+                        });
+                    }
+                })
+            },
+            no : function() {
+                layer.close();
+            }
+        });
+    });
+</script>

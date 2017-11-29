@@ -1,0 +1,45 @@
+<layout name = "layout/main"/>
+<div class="pageTitle">
+    <div class="title">账号角色添加修改——用户管理</div>
+</div>
+<ul class="optionList">
+    <li><a href="{:U('user/role')}"><span class="icon-return"></span>返回列表</a></li>
+</ul>
+<form method="POST" action="{:U('user/roleSave')}">
+    <input type="hidden" name="id" value="<?=$role['id']?>">
+    <table class="tableForm" width="100%">
+        <tr>
+            <th>角色名称：</th>
+            <td>
+                <input type="text" name="name" value="<?=$role['name']?>" class="text">
+            </td>
+        </tr>
+        <tr>
+            <th>角色类型：</th>
+            <td>
+                <?php if($role['id']) { ?>
+                <?=$roleType[$role['type']]?>
+                <?php }else {  ?>
+                <select name="type">
+                    <?php foreach ($roleType as $key=> $_roleType) { ?>
+                    <option value="<?=$key?>"><?=$_roleType?></option>
+                    <?php } ?>
+                </select>
+                <?php } ?>
+            </td>
+        </tr>
+        <tr>
+            <th>状态：</th>
+            <td>
+                <input type="radio" name="status" value="1" <?=$role['status']?'checked':''?>>激活 &nbsp;
+                <input type="radio" name="status" value="0" <?=!$role['status']?'checked':''?>>未激活
+            </td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>
+                <input type="submit" value="保存" class="submit">
+            </td>
+        </tr>
+    </table>
+</form>

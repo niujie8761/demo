@@ -6,7 +6,7 @@ return array(
     'DEFAULT_MODULE'  => 'Home',
     'URL_MODEL' => 2,
     'URL_CASE_INSENSITIVE' => false,
-
+    'URL_HTML_SUFFIX' => '',
 
 //*************************************附加设置***********************************
     'SHOW_PAGE_TRACE'        => false,                           // 是否显示调试面板

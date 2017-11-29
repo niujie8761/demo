@@ -59,13 +59,14 @@ class BaseModel extends Model{
      *
      * @param array $data
      * @param string $where
+     * @param string $column
      * @return bool
      */
-    public function saveData($data = array(), $where = '') {
+    public function saveData($data = array(), $where = '', $column = '') {
         if(empty($data)) {
             return false;
         }
-        $data = utf8_to_gbk($data);
+        $data = $this->inPut($data, $column);
         if(empty($where)) {
             return $this->save($data);
         }else {
@@ -79,14 +80,34 @@ class BaseModel extends Model{
      * @param string $where
      * @return bool|mixed
      */
-    public function findData($where = '')
+    public function findData($where = '', $cloum = '')
     {
         if($where == '') {
             return false;
         }else {
             $data = $this->where($where)->find();
-            return $this->outPut($data, 'kam_role');
+            return $this->outPut($data, $cloum);
         }
+    }
+
+    /**
+     * 输入格式化
+     *
+     * @param $data
+     * @param $keys
+     * @return array
+     */
+    public function inPut($data, $keys = "")
+    {
+        $arr = array();
+        foreach(gbk_to_utf8($data) as $key => $value) {
+            if($key == $keys) {
+                $arr[$key] = serialize($value);
+            }else {
+                $arr[$key] = $value;
+            }
+        }
+        return $arr;
     }
 
     /**
@@ -96,7 +117,7 @@ class BaseModel extends Model{
      * @param $keys
      * @return array
      */
-    public function outPut($data, $keys) {
+    public function outPut($data, $keys = "") {
         $arr = array();
         foreach(gbk_to_utf8($data) as $key => $value)
         {
