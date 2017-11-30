@@ -75,59 +75,36 @@ class BaseModel extends Model{
     }
 
     /**
-     * 查找数据 （1条）
+     * 查找数据（1条）
      *
      * @param string $where
-     * @return bool|mixed
+     * @param string $column
+     * @return array|bool
      */
-    public function findData($where = '', $cloum = '')
-    {
+    public function findData($where = '', $column = '') {
         if($where == '') {
             return false;
         }else {
             $data = $this->where($where)->find();
-            return $this->outPut($data, $cloum);
+            return $this->outPut($data, $column, 1);
         }
     }
 
     /**
-     * 输入格式化
+     * 查找数据（多条）
      *
-     * @param $data
-     * @param $keys
-     * @return array
+     * @param string $where
+     * @param string $column
+     * @return array|string
      */
-    public function inPut($data, $keys = "")
-    {
-        $arr = array();
-        foreach(gbk_to_utf8($data) as $key => $value) {
-            if($key == $keys) {
-                $arr[$key] = serialize($value);
-            }else {
-                $arr[$key] = $value;
-            }
+    public function selectData($where = '', $column = '') {
+        if ($where == '') {
+            $data = $this->select();
+            return gbk_to_utf8($data);
+        } else {
+            $data = $this->where($where)->select();
+            return $this->outPut($data, $column, 2);
         }
-        return $arr;
-    }
-
-    /**
-     * 输出格式化
-     *
-     * @param $data
-     * @param $keys
-     * @return array
-     */
-    public function outPut($data, $keys = "") {
-        $arr = array();
-        foreach(gbk_to_utf8($data) as $key => $value)
-        {
-            if($key == $keys) {
-                $arr[$key] = unserialize($value);
-            }else {
-                $arr[$key] = $value;
-            }
-        }
-        return $arr;
     }
 
     /**
@@ -145,22 +122,6 @@ class BaseModel extends Model{
     }
 
     /**
-     * 查找数据
-     *
-     * @param string $where
-     * @return mixed
-     */
-    public function selectData($where = '') {
-        if ($where == '') {
-            $data = $this->select();
-            return gbk_to_utf8($data);
-        } else {
-            $data = $this->where($where)->select();
-            return gbk_to_utf8($data);
-        }
-    }
-
-    /**
      *
      * 查找数据按顺序排列
      *
@@ -173,9 +134,57 @@ class BaseModel extends Model{
         return gbk_to_utf8($data);
     }
 
-    public function pageData($where = "", $firstRow = "", $listRows="", $order="")
-    {
+    public function pageData($where = "", $firstRow = "", $listRows="", $order="") {
         $data = $this->where($where)->order($order)->limit($firstRow, $listRows)->select();
         return gbk_to_utf8($data);
+    }
+
+    /**
+     * 输入格式化
+     *
+     * @param $data
+     * @param $keys
+     * @return array
+     */
+    public function inPut($data, $keys = "") {
+        $arr = array();
+        foreach(gbk_to_utf8($data) as $key => $value) {
+            if($key == $keys) {
+                $arr[$key] = serialize($value);
+            }else {
+                $arr[$key] = $value;
+            }
+        }
+        return $arr;
+    }
+
+    /**
+     * @param $data
+     * @param string $keyParam 需要反序列化的字段
+     * @param string $dimension
+     * @return array
+     */
+    public function outPut($data, $keyParam = "", $dimension = "") {
+        $arr = array();
+        if($dimension == 1) {
+            foreach(gbk_to_utf8($data) as $key => $value) {
+                if($key == $keyParam) {
+                    $arr[$key] = unserialize($value);
+                }else {
+                    $arr[$key] = $value;
+                }
+            }
+        }else if($dimension == 2){
+            foreach(gbk_to_utf8($data) as $key => $value) {
+                foreach($value as $ks => $vs) {
+                    if($ks == $keyParam) {
+                        $arr[$key][$ks] = unserialize($vs);
+                    }else {
+                        $arr[$key][$ks] = $vs;
+                    }
+                }
+            }
+        }
+        return $arr;
     }
 }
