@@ -9,6 +9,7 @@
 namespace Home\Controller;
 
 
+use Home\Model\MangerModel;
 use Home\Model\MenuModel;
 use Home\Model\RoleModel;
 use Think\Cache\Driver\Redis;
@@ -105,12 +106,49 @@ class UserController extends BaseController
     public function roleRight()
     {
         if(IS_POST) {
-           $data = I('post.');
-           $roleM = RoleModel::getInstance('role');
-           $where['id'] = $data['id'];
-           $roleM->saveData($data, $where, 'rights');
-           $this->redirect('user/role');
+            $data = I('post.');
+            $roleM = RoleModel::getInstance('role');
+            $where['id'] = $data['id'];
+            //角色权限同步到个人权限
+            $mangerM = MangerModel::getInstance('manger');
+            $condition = array('role_id' => $data['id']);
+            $mangerList = $mangerM->selectData($condition, 'kam_role');
+
+            //减少的权限
+            $role = $roleM->findData($where, 'rights');
+            $minArr = array_diff($role['rights'], $data['rights']);
+
+            //新增的权限如果个人中没有的，都要加上
+            foreach($data['rights'] as $k => $v) {
+                foreach($mangerList as $key => $value) {
+                    $menu = $value['kam_role']['menu'];
+                    $city = $value['kam_role']['city'];
+                    unset($value['kam_role']);
+                    if(!in_array($v, $menu)) {
+                        array_unshift($menu, $v);
+                        $kam_role = array('menu' => $menu, 'city' => $city);
+                        $mangerList[$key]['kam_role'] = $kam_role;
+                    }
+                }
+            }
+            //减少的角色要在上面去掉
+            foreach($minArr as $kt => $vt) {
+                foreach($mangerList as $keys => $values) {
+                    $menu = $values['kam_role']['menu'];
+                    $city = $values['kam_role']['city'];
+                    unset($values['kam_role']);
+                    foreach($menu as $kts => $vts) {
+                        if($vts == $vt) {
+                            unset($menu[$kts]);
+                        }
+                    }
+                    $mangerList[$keys]['kam_role'] = array('menu' => $menu, 'city' => $city);
+                }
+            }
+            $roleM->saveData($data, $where, 'rights');
+            $this->redirect('user/role');
         }
+
         $redis = new Redis();
         $menus = $redis->get('menus');
         if(empty($menus)) {

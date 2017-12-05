@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>添加城市</title>
+    <link type="text/css" rel="stylesheet" href="http://pic.house365.com/erbu/fgjManage/css/fgjAdmin.css">
+    <script charset="GBK" src="http://pic.house365.com/static/jquery/jquery-1.11.1.min.js"></script>
+    <script src="__PUBLIC__/Layer/layer.js"></script>
+    <script src="__PUBLIC__/Home/js/Validform_v5.3.2_min.js"></script>
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/Home/css/style.css"/>
+</head>
+<body>
+<div class="box" id="interestManage">
+    <div class="box-con">
+        <div class="box-b">
+            <div class="hd yz-pre"><h3></h3></div>
+            <div class="bd">
+                <form method="POST"  id="myform">
+                    <table class="tabtwo" border="1" cellpadding="1" cellspacing="1" width="100%">
+                        <tr>
+                            <td ><tip style="color:red">*</tip>城市名称</td>
+                            <td colspan="2" style="text-align:left"><input type="text" name="city_name"  id="name" value="" maxlength="10" onblur="check('name',2,10)" onkeyup="checkNum('name','name_num',10);return false;" ></td>
+                            <td ><span style="float:left" id="name_num"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red" class="name_num"></span></td>
+                        </tr>
+                        <tr>
+                            <td><tip style="color:red">*</tip>拼音缩写</td>
+                            <td colspan="2" style="text-align:left"><input type="text" name="city"  id="city" value=""  maxlength="20" onblur="check('city',2,20)" onkeyup="checkNum('city','city_num',20);return false;"></td>
+                            <td><span style="float:left" id="city_num"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red" class="city_num"></span></td>
+                        </tr>
+                        <tr>
+                            <td><tip style="color:red">*</tip>客服电话</td>
+                            <td colspan="2" style="text-align:left"><input type="text" name="400"  id="s400" value="" maxlength="20"  onblur="check('s400',7,20)"></td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red" class="s400_num"></span></td>
+                        </tr>
+                        <tr>
+                            <td>运营状态</td>
+                            <td ><input type="radio" class="is_open" name="is_open"  value="1" checked='checked'>启用</td>
+                            <td ><input type="radio" class="is_open" name="is_open"  value="0" >停用</td>
+                            <td><span style="color:red">停用前请将所有项目下架<span></td>
+                        </tr>
+                        <tr>
+                            <td>查看短信</td>
+                            <td ><input type="radio" class="is_msg" name="is_msg"  value="1" checked='checked'>启用</td>
+                            <td ><input type="radio" class="is_msg" name="is_msg"  value="0" >停用</td>
+                        </tr>
+                        <tr>
+                            <td rowspan='2'>报备配置</td>
+                            <td colspan="2" style="text-align:left">开通带看报备业务</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:left"><input type="checkbox" id="consign" name="consign"  value="1">开通委托报备业务</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td rowspan='2'>报备方式</td>
+                            <td colspan="2" style="text-align:left">完整手机号码报备</td>
+                            <td><span style="color:#999">手机号码只需填写前3位，后4位<span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:left"><input type="checkbox" id="telprotect" name="telprotect"  value="1">支持号码保护报备</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">用户配置</td>
+                            <td colspan="2" style="text-align:left">支持审核为认证经纪人</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:left"><input type="checkbox" id="unagent" name="unagent"  value="1">支持认证为非经纪人用户</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td ><input type="button"   value="确认"  id="baocun"></td>
+                            <td ><input type="button"  value="取消"  id="cancel"></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(function(){
+        $('#cancel').click(function(){
+            closeLayer();
+        });
+        $('#baocun').click(function(){
+            var name;
+            var city;
+            var s400;
+            var is_open;
+            var consign;
+            var telprotect;
+            var unagent;
+            var is_msg;
+
+             name = $("#name").val();
+             city = $("#city").val();
+             s400 = $("#s400").val();
+            if(name.length < 2 || city.length < 2 || s400.length < 7){
+                alert("请输入正确信息");
+                return false;
+            }
+            is_open = $('#myform input[name="is_open"]:checked ').val();
+            if($('#consign').is(':checked')){
+                 consign = 1;
+            }else{
+                 consign = 0;
+            }
+            if($('#telprotect').is(':checked')){
+                telprotect = 1;
+            }else{
+                telprotect = 0;
+            }
+            if($('#unagent').is(':checked')){
+                 unagent = 1;
+            }else{
+                 unagent = 0;
+            }
+            if($(".is_msg").is(':checked')) {
+                 is_msg = 1;
+            }else {
+                 is_msg = 0;
+            }
+            var data = {
+                "city": city,
+                "city_name": name,
+                "is_msg": is_msg,
+                "s400": s400,
+                "is_open": is_open,
+                "consign": consign,
+                "telprotect": telprotect,
+                "unagent": unagent
+            };
+            $.ajax({
+                url: "<?php echo U('systemmanage/add')?>",    //请求的url地址
+                dataType: "json",   //返回格式为json
+                async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+                data: data,    //参数值
+                type: "POST",   //请求方式
+                success: function(result) {
+                    console.log(result);
+                    if(result.code != 200){
+                        alert(result.msg);
+                    }else if(result.code == 200){
+                        closeLayer();
+                        var urls = "<?php echo U('systemmanage/index');?>";
+                        window.parent.location.href = urls;
+                    }
+                }
+            });
+        })
+    });
+    $("#myform").Validform({
+        tiptype:3,
+    });
+    function closeLayer(){
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    }
+    function checkNum(a,b,c){
+        var len=document.getElementById(a).value.length;
+        $('#'+b).html(len+"/"+c);
+    }
+    function check(a,b,c){
+        var len=document.getElementById(a).value.length;
+        if(len < b){
+            $('.'+a+'_num').html('请输入'+b+'~'+c+'个字符');
+        }else{
+            $('.'+a+'_num').html('');
+        }
+    }
+</script>
+</html>

@@ -135,7 +135,7 @@ class BaseModel extends Model{
     }
 
     public function pageData($where = "", $firstRow = "", $listRows="", $order="") {
-        $data = $this->where($where)->order($order)->limit($firstRow, $listRows)->select();
+        $data = $this->where($where)->limit($firstRow, $listRows)->order($order)->select();
         return gbk_to_utf8($data);
     }
 

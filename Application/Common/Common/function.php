@@ -20,7 +20,7 @@ function gbk_to_utf8($data) {
 //数据格式由utf-8 转变为gbk
 function utf8_to_gbk($data) {
     $arr = array();
-    if(is_string($data)) {
+    if(is_string($data) || is_int($data)) {
         $result = iconv('utf-8', 'gbk', $data);
         return $result;
     }else {

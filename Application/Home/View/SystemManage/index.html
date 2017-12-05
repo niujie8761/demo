@@ -1,0 +1,107 @@
+<layout name="layout/main"/>
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=7">
+    <title>城市配置</title>
+    <script src="http://pic.house365.com/static/jquery/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="http://pic.house365.com/static/calendar/WdatePicker.js"></script>
+    <link type="text/css" rel="stylesheet" href="http://zk.house365.com/Public/Admin/js/calendar/skin/WdatePicker.css">
+    <link type="text/css" rel="stylesheet" href="http://pic.house365.com/erbu/fgjManage/css/fgjAdmin.css">
+</head>
+<body>
+<div class="m10 bg">
+    <div class="title cf">
+        <span class="fl">城市配置</span>
+        <button style="float:right" class="addCity">添加城市</button>
+    </div>
+    <div class="bors p10 pre mt30">
+        <h2 class="tittwo"><span class="iconfont f12">&#xe611;</span> 查询条件</h2>
+        <form action="{:U('systemmanage/index')}" method="GET"  enctype="application/x-www-form-urlencoded">
+            <div class="cf">
+                城市名称：<input type="text" class="bors w100 p5" placeholder="" name="city_name" value="<?=$_GET['city_name']?>"/>&nbsp;
+                运营状态：<input type="radio" name="is_open" value="1" <?php if($_GET['is_open'] == 1){ echo "checked='checked'";}?>/>启用&nbsp;<input type="radio" name="is_open" value="0" <?php if(isset($_GET['is_open']) &&  $_GET['is_open'] == 0){ echo "checked='checked'";}?>/>停用&nbsp;
+                委托报备：<select class="bors p5 w190" name="consign">
+                <option value="0" <?php if($_GET['consign'] == 0){ echo "selected='selected'";}?>>全部</option>
+                <option value="1" <?php if($_GET['consign'] == 1){ echo "selected='selected'";}?>>启用</option>
+                <option value="2" <?php if($_GET['consign'] == 2){ echo "selected='selected'";}?>>停用</option>
+            </select>&nbsp;
+                非经纪人认证：<select class="bors p5 w190" name="unagent">
+                <option value="0" <?php if($_GET['unagent'] == 0){ echo "selected='selected'";}?>>全部</option>
+                <option value="1" <?php if($_GET['unagent'] == 1){ echo "selected='selected'";}?>>启用</option>
+                <option value="2" <?php if($_GET['unagent'] == 2){ echo "selected='selected'";}?>>停用</option>
+            </select>&nbsp;
+                查看短信：<input type="radio" name="is_msg" value="1" <?php if($_GET['is_msg'] == 1) {echo "checked='checked'";}?>/>启用<input type="radio" name="is_msg" value="0" <?php if($_GET['is_msg'] == 0 && isset($_GET['is_msg'])){echo "checked='checked'";}?>/>停用
+                <button class="btn btn-normal ml10 mt4"><span class="iconfont">&#xe611;</span>搜索</button>
+            </div>
+        </form>
+    </div>
+    <div class="bors mt30 pre">
+        <h2 class="tittwo"><span class="iconfont f12">&#xe611;</span> 搜索结果</h2>
+        <div class="m10">
+            <table class="tabtwo" width="100%">
+                <tr>
+                    <th width="10%">城市名称</th>
+                    <th width="8%">城市拼音</th>
+                    <th width="14%">添加时间</th>
+                    <th width="13%">客服电话</th>
+                    <th width="10%">运营状态</th>
+                    <th width="10%">委托报备</th>
+                    <th width="8%">非经纪人认证</th>
+                    <th width="10%">查看短信</th>
+                    <th width="10%">最后更新</th>
+                    <th width="8%">操作</th>
+                </tr>
+                <?php foreach ($cityList as $key => $vo) : ?>
+                <tr>
+                    <td><?=$vo['city_name']?></td>
+                    <td><?=$vo['city']?></td>
+                    <td><?php echo date("Y/m/d H:i", $vo['addtime']);?></td>
+                    <td><?=$vo['serviceNum']?></td>
+                    <td><?php if($vo['is_open'] == 0){ echo '停用';}elseif($vo['is_open'] == 1){ echo '启用';} ?></td>
+                    <td><?php if($vo['consign'] == 0){ echo '停用';}elseif($vo['consign'] == 1){ echo '启用';} ?></td>
+                    <td><?php if($vo['unagent'] == 0){ echo '停用';}elseif($vo['unagent'] == 1){ echo '启用';} ?></td>
+                    <td><?php if($vo['is_msg'] == 0){echo '停用';}elseif($vo['is_msg'] == 1){echo '启用';}?></td>
+                    <td><?php echo date("Y/m/d H:i", $vo['updatetime']);?></td>
+                    <td>
+                        <button class="btn btn-normal  edit" data-id="<?=$vo['id']?>"><span class="iconfont">&#xe616;</span> 编辑</button>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+
+            <div class="pages" style="margin-top:8px;">
+                {$page}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $('.edit').on('click', function(){
+        var id = $(this).data('id');
+        var url = "/systemmanage/edit?id="+id;
+        layer.open({
+            type: 2,
+            title: '编辑城市',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['60%', '60%'],
+            content: [url] //iframe的url
+        });
+    });
+
+    $('.addCity').on('click', function(){
+        var url = "/systemmanage/add";
+        layer.open({
+            type: 2,
+            title: '添加城市',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['80%', '60%'],
+            content: [url] //iframe的url
+        });
+    });
+</script>
+</html>

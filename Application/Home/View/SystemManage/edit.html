@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>编辑城市</title>
+    <link type="text/css" rel="stylesheet" href="http://pic.house365.com/erbu/fgjManage/css/fgjAdmin.css">
+    <script src="http://pic.house365.com/static/jquery/jquery-1.11.1.min.js"></script>
+    <script src="__PUBLIC__/Layer/layer.js"></script>
+    <script src="__PUBLIC__/Home/js/Validform_v5.3.2_min.js"></script>
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/Home/css/style.css"/>
+</head>
+<body>
+<div class="box" id="interestManage">
+    <div class="box-con">
+        <div class="box-b">
+            <div class="hd yz-pre"><h3></h3></div>
+            <div class="bd">
+                <form method="POST"  id="myform">
+                    <input type="hidden" name="id" id="id"  value="<?php echo $city['id'];?>">
+                    <input type="hidden" name="ocity"  id="ocity" value="<?php echo $city['city'];?>">
+                    <table class="tabtwo" border="1" cellpadding="1" cellspacing="1" width="100%">
+                        <tr>
+                            <td >城市名称</td>
+                            <td colspan="2" style="text-align:left"><?php echo $city['city_name'];?></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>拼音缩写</td>
+                            <td colspan="2" style="text-align:left"><input type="text" id="city"  id="city" value="<?php echo $city['city'];?>"  datatype="s2-20" errormsg="2-20个字符！"  ></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>客服电话</td>
+                            <td colspan="2" style="text-align:left"><input type="text" id="s400" name="400"  value="<?php echo $city['400'];?>" datatype="*7-20" errormsg="7-20个字符！"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>运营状态</td>
+                            <td ><input type="radio" class="is_open" name="is_open"  value="1" <?php if($city['is_open'] == 1){ echo "checked='checked'";} ?>>启用</td>
+                            <td ><input type="radio" class="is_open" name="is_open"  value="0" <?php if($city['is_open'] == 0){ echo "checked='checked'";} ?>>停用</td>
+                            <td><span style="color:red">停用前请将所有项目下架<span></td>
+                        </tr>
+                        <tr>
+                            <td>查看短信</td>
+                            <td ><input type="radio"  class="is_msg" name="is_msg"  value="1" <?php if($city['is_msg'] == 1){ echo "checked='checked'";} ?>>启用</td>
+                            <td ><input type="radio"  class="is_msg" name="is_msg"  value="0" <?php if($city['is_msg'] == 0){ echo "checked='checked'";} ?>>停用</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td rowspan='2'>报备配置</td>
+                            <td colspan="2" style="text-align:left">开通带看报备业务</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:left"><input type="checkbox" id="consign" name="consign"  value="1" <?php if($city['consign'] == 1){ echo "checked='checked'";} ?>>开通委托报备业务</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td rowspan='2'>报备方式</td>
+                            <td colspan="2" style="text-align:left">完整手机号码报备</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:left"><input type="checkbox" id="telprotect" name="telprotect"  value="1" <?php if($city['telprotect'] == 1){ echo "checked='checked'";} ?>>支持号码保护报备</td>
+                            <td><span style="color:#999">手机号码只需填写前3位，后4位<span></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">用户配置</td>
+                            <td colspan="2" style="text-align:left">支持审核为认证经纪人</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:left"><input type="checkbox" name="unagent"  id="unagent" value="1" <?php if($city['unagent'] == 1){ echo "checked='checked'";} ?>>支持认证为非经纪人用户</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td ><input type="button"   value="确认"  id="baocun1"></td>
+                            <td ><input type="button"   value="取消" id="cancel1"></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(function(){
+        $('#cancel1').click(function(){
+            closeLayer();
+        })
+
+        $('#baocun1').click(function(){
+            var ocity = $("#ocity").val();
+            var id = $("#id").val();
+            var city = $("#city").val();
+            var s400 = $("#s400").val();
+            var is_open = $('#myform input[name="is_open"]:checked ').val();
+            var is_msg = $('#myform input[name="is_msg"]:checked').val();
+            if($('#consign').is(':checked')){
+                var consign = 1;
+            }else{
+                var consign = 0;
+            }
+            if($('#telprotect').is(':checked')){
+                var telprotect = 1;
+            }else{
+                var telprotect = 0;
+            }
+            if($('#unagent').is(':checked')){
+                var unagent = 1;
+            }else{
+                var unagent = 0;
+            }
+
+            var data = {"city":city,"ocity":ocity,"id":id,"s400":s400,"is_open":is_open,"is_msg":is_msg,"consign":consign,"telprotect":telprotect,"unagent":unagent}
+
+            $.ajax({
+                url: "/systemmanage/edit",    //请求的url地址
+                dataType: "json",   //返回格式为json
+                async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+                data: data,    //参数值
+                type: "POST",   //请求方式
+                success: function(result) {
+                    //请求成功时处理
+                    if(result.code != 200){
+                        alert('城市拼音缩写有重复')
+                        return false;
+                    }else if(result.code == 200){
+                        var urls = "<?php echo U('systemmanage/index')?>";
+                        closeLayer();
+                        window.parent.location.href = urls;
+                    }
+                }
+            });
+        })
+    })
+    $("#myform").Validform({
+        tiptype:3,
+    });
+
+    function check(city,id){
+        var data = {'city':city,'id':id}
+        $.post('/systemmanage/check',data,
+            function(ret){
+                console.log(ret)
+                if(ret == 1){
+                    alert("城市拼音缩写有重复")
+                    return false;
+                }if(ret == 3){
+                    $('#myform').submit();
+                }
+            }
+        )
+    }
+
+    function closeLayer(){
+        parent.window.location.reload();
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    }
+</script>
+</html>
