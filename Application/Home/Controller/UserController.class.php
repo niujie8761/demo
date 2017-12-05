@@ -179,4 +179,40 @@ class UserController extends BaseController
         $this->assign($data);
         $this->display();
     }
+
+    /**
+     * 后台用户
+     */
+    public function admin()
+    {
+        $pageSize = isset($_REQUEST['pageSize']) ? $_REQUEST['pageSize'] : 10;
+        $condition = array();
+        $map = array();
+        if(isset($_REQUEST['username']) && !empty($_REQUEST['username'])) {
+            $username = iconv('utf-8', 'gbk', $_REQUEST['username']);
+            $condition['kam_username'] = array('like', '%'.$username.'%');
+            $condition['kam_nickname'] = array('like', '%'.$username.'%');
+            $condition['_logic'] = 'or';
+            $map['_complex'] = $condition;
+        }
+        $manageM = MangerModel::getInstance('manger');
+        $map['isdel'] = 0;
+        $map['kam_city'] = $this->city;
+        $count = $manageM->where($map)->count();
+        $page = getPage($count, $pageSize);
+        $order = array('create_time desc');
+        $managerList = $manageM->pageData($map, $page->firstRow, $page->listRows, $order);
+        $roleM = RoleModel::getInstance('role');
+        foreach($managerList as $k => &$v) {
+            $condition = array('id' => $v['role_id']);
+            $roleInfo = $roleM->findData($condition, 'rights');
+            $v['role_name'] = $roleInfo['name'];
+        }
+        $data = array(
+            'managerList' => $managerList,
+            'page' => $page->show()
+        );
+        $this->assign($data);
+        $this->display();
+    }
 }

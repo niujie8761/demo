@@ -1,0 +1,65 @@
+<layout name="layout/main" />
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Home/css/dialog.css"/>
+<link rel=stylesheet href="__PUBLIC__/Home/css/base.css" type="text/css">
+<style>
+    .ipt{font-family:\5FAE\8F6F\96C5\9ED1;border:1px solid #e6e6e6;padding-left:5px;width:125px;font-size:14px;color:#555;height:26px;line-height:26px;vertical-align:middle;}
+    .jihuo_1{color:#555555;}
+    .jihuo_0{color:#999999;}
+</style>
+<div class="pageTitle">
+    <div class="title">管理员账号管理——用户管理</div>
+</div>
+<ul class="optionList">
+    <li>
+        <a href="/user/admin_save" onclick=""><span class="icon-add"></span>添加管理员账号</a>
+    </li>
+</ul>
+<div class="container clearfix" style="margin:0;">
+    <div class="search" style="border: 1px solid #8ECDF2;padding-top:0;">
+        <div style="padding-left: 5px;background:#8ECDF2;font-size:14px;">查询条件</div>
+        <form action="" method="GET" id="search_form" name="search_form">
+            <div style="margin: 7px;">
+                <label>搜索关键字：</label>
+                <input type="text" name="username" id="company" value="<?=$_GET['username']?>" class="ipt company" placeholder="用户名/姓名" autocomplete="off"/>
+            </div>
+            <div style="margin-bottom:7px;">
+                <input type="submit" class="btn plr10" value="搜索" />
+            </div>
+        </form>
+    </div>
+
+    <div class="box mt20">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-a">
+            <tr>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>姓名</th>
+                <th>城市</th>
+                <th>角色</th>
+                <th>操作</th>
+            </tr>
+            <?php foreach ($managerList as $key => $_user) : ?>
+            <tr>
+                <td><?=$_user['kam_id']?></td>
+                <td><?=$_user['kam_username']?></td>
+                <td><?=$_user['kam_nickname']?></td>
+                <td><?=$_user['kam_city']?></td>
+                <td><?=$_user['role_name']?></td>
+                <td>
+                    <?php if($uin['kam_id']!=$_user['kam_id']){?>
+                    <a class="edit" href="/user/admin_save?id=<?=$_user['kam_id']?>">编辑</a>
+                    <?php }else{?>
+                    <font color="gray">编辑</font>
+                    <?php }?>|
+                    <a class="delete" href="/user/admin_delete?id=<?=$_user['kam_id']?>">删除</a> |
+                    <a class="operate" href="/user/admin_rights?id=<?=$_user['kam_id']?>">权限</a>
+                </td>
+
+            </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    <div class="pages" style="margin-top:8px;">
+        {$page}
+    </div>
+</div>
