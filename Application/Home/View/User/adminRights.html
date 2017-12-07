@@ -18,7 +18,7 @@
     </volist>
     城市：
    <foreach name="city" item="vo">
-    <input type="checkbox" name="rights[city][]" value="{$vo.city}" <if condition="in_array($vo['city'], $manger['kam_role']['city'])">checked="checked" </if>>
+    <input type="checkbox" name="rights[city][]" value="{$vo.city}" <if condition="in_array($vo['city'], $manger['kam_role']['city']) || $vo['city'] == $manger['kam_city']">checked="checked" </if>>
    {$vo.city_name}
    </foreach>
     <br>
