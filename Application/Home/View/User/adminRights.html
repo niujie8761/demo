@@ -1,0 +1,26 @@
+<layout name="Layout/main" />
+<div class="pageTitle">
+    <div class="title">用户权限设置——用户管理</div>
+</div>
+用户名：{$manger.kam_nickname}
+<form method="POST" action="{:U('user/adminRights')}">
+    <input type="hidden" name="id" value="{$manger.kam_id}">
+    <volist name="menus" id="vo">
+        <div class="role_class">
+            <input type="checkbox" name="rights[menu][]" value="{$vo.kamu_id}" <if condition="in_array($vo['kamu_id'], $manger['kam_role']['menu'])">checked="checked"</if>>{$vo.kamu_name}
+            <a class="edit" href="javascript:void(0);" onclick="$(this).prevAll('input').attr('checked',true);$(this).parent().next().find('input').attr('checked',true);return false;" style="font-size:12px;font-weight:normal">全选</a>
+        </div>
+            <ul class="memus clearfix">
+                <volist name="vo['children']" id="v2">
+                <li><input type="checkbox" name="rights[menu][]" value="{$v2.kamu_id}" <if condition="in_array($v2['kamu_id'], $manger['kam_role']['menu'])">checked="checked"</if>>{$v2.kamu_name}</li>
+                </volist>
+            </ul>
+    </volist>
+    城市：
+   <foreach name="city" item="vo">
+    <input type="checkbox" name="rights[city][]" value="{$vo.city}" <if condition="in_array($vo['city'], $manger['kam_role']['city'])">checked="checked" </if>>
+   {$vo.city_name}
+   </foreach>
+    <br>
+    <input type="submit" value="设置权限">
+</form>

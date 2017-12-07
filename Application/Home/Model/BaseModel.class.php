@@ -29,14 +29,15 @@ class BaseModel extends Model{
      * 增加
      *
      * @param array $data
+     * @param string $column
      *
      * @return boolean
      */
-    public function addData($data = array()) {
+    public function addData($data = array(), $column = '') {
         if (empty($data)) {
-            return FALSE;
+            return false;
         }
-        $data = utf8_to_gbk($data);
+        $data = $this->input($data, $column);
         return $this->add($data);
     }
 
@@ -148,7 +149,7 @@ class BaseModel extends Model{
      */
     public function inPut($data, $keys = "") {
         $arr = array();
-        foreach(gbk_to_utf8($data) as $key => $value) {
+        foreach(utf8_to_gbk($data) as $key => $value) {
             if($key == $keys) {
                 $arr[$key] = serialize($value);
             }else {

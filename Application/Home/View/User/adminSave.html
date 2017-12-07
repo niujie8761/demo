@@ -1,0 +1,111 @@
+<layout name="Layout/main" />
+<div class="pageTitle">
+    <div class="title">管理员账号添加修改——用户管理</div>
+</div>
+
+<ul class="optionList">
+    <li><a href="{:U('user/admin')}"><span class="icon-return"></span>返回列表</a></li>
+</ul>
+
+<form method="POST" action="{:U('user/adminSave')}" id="admin_user_edit">
+    <input type="hidden" name="kam_id" value="{$manger.kam_id}">
+    <table class="tableForm" width="100%">
+        <tr>
+            <th>用户名：</th>
+            <td>
+                <?php if($manger['kam_id']) {
+                    echo $manger['kam_username'];
+                }else{ ?>
+                <input type="text" class="text required" name="kam_username">&nbsp;&nbsp;（请填写手机号码）
+                <?php } ?>
+            </td>
+        </tr>
+        <tr>
+            <th>姓名：</th>
+            <td>
+                <input type="text" class="text required" name="kam_nickname" value="<?=$manger['kam_nickname'] ?>">
+            </td>
+        </tr>
+        <tr>
+            <th>密码：</th>
+            <td>
+                <input type="text" class="text password" name="kam_password" value=""><span class="tips">不填，密码不做修改。新增默认密码是House365</span>
+            </td>
+        </tr>
+        <tr>
+            <th>默认城市：</th>
+            <td>
+                <select name="kam_city">
+                    <?php foreach ($city as $key => $_city) { ?>
+                    <if condition="$manger.kam_city eq ($_city['city']) ">
+                        <option value="{$_city['city']}" selected = "selected">{$_city['city_name']}</option>
+                        <else />
+                        <option value="{$_city['city']}">{$_city['city_name']}</option>
+                    </if>
+                    <?php } ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>用户角色：</th>
+            <td>
+                <select name="role_id" class="required">
+                    <option value="0">选择用户角色</option>
+                    <?php foreach ($roles as $_role) { ?>
+                    <if condition="$manger.role_id eq ($_role['id'])">
+                        <option value="{$_role['id']}" selected = "selected">{$_role['name']}</option>
+                        <else />
+                        <option value="{$_role['id']}">{$_role['name']}</option>
+                    </if>
+                    <?php } ?>
+                </select>
+                <input type="checkbox" name="syn_rights" value="1" <if condition="$manger.tag eq 1"> checked="checked" <else/> </if>>同步角色的权限
+            </td>
+        </tr>
+        <tr>
+            <th>状态：</th>
+            <td>
+                <input type="radio" value="0" name="kam_status" <if condition="$manger.kam_status == 1"><else />checked="checked"</if>>无效
+                <input type="radio" value="1" name="kam_status" <if condition="$manger.kam_status == 0"><else />checked="checked"</if>>有效
+            </td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>
+                <input type="submit" value="保存" class="submit">
+            </td>
+        </tr>
+    </table>
+</form>
+<script>
+    $('#admin_user_edit').submit(function() {
+        //必填项验证
+        var requireds = $(this).find('.required');
+        var len = requireds.length;
+        var cansub = true;
+        for(var i=0; i<len; i++){
+            if( $(requireds[i]).val()=='' || $(requireds[i]).val()==0 ){
+                cansub = false;
+                if( $(requireds[i]).nextAll('.error_required').length == 0 ){
+                    $(requireds[i]).after('<span class="error error_required">该项为必填</span>');
+                }
+            }else{
+                $(requireds[i]).nextAll('.error_required').remove();
+            }
+        }
+
+        var passwords = $(this).find('.password');
+        len = passwords.length;
+        for (i=0; i<len; i++){
+            if( $(passwords[i]).val().length>0 && $(passwords[i]).val().length<6 ){
+                cansub = false;
+                if( $(passwords[i]).nextAll('.error_password').length == 0 ){
+                    $(passwords[i]).after('<span class="error error_password">密码必须超过6位字符</span>');
+                }
+            }else{
+                $(passwords[i]).nextAll('.error_password').remove();
+            }
+        }
+        return cansub;
+    });
+</script>

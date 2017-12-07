@@ -5,13 +5,14 @@
     .ipt{font-family:\5FAE\8F6F\96C5\9ED1;border:1px solid #e6e6e6;padding-left:5px;width:125px;font-size:14px;color:#555;height:26px;line-height:26px;vertical-align:middle;}
     .jihuo_1{color:#555555;}
     .jihuo_0{color:#999999;}
+    .deletes{cursor:pointer;}
 </style>
 <div class="pageTitle">
     <div class="title">管理员账号管理——用户管理</div>
 </div>
 <ul class="optionList">
     <li>
-        <a href="/user/admin_save" onclick=""><span class="icon-add"></span>添加管理员账号</a>
+        <a href="{:U('user/adminSave')}"><span class="icon-add"></span>添加管理员账号</a>
     </li>
 </ul>
 <div class="container clearfix" style="margin:0;">
@@ -47,14 +48,13 @@
                 <td><?=$_user['role_name']?></td>
                 <td>
                     <?php if($uin['kam_id']!=$_user['kam_id']){?>
-                    <a class="edit" href="/user/admin_save?id=<?=$_user['kam_id']?>">编辑</a>
+                    <a class="edit" href="/user/adminSave?id=<?=$_user['kam_id']?>">编辑</a>
                     <?php }else{?>
                     <font color="gray">编辑</font>
                     <?php }?>|
-                    <a class="delete" href="/user/admin_delete?id=<?=$_user['kam_id']?>">删除</a> |
-                    <a class="operate" href="/user/admin_rights?id=<?=$_user['kam_id']?>">权限</a>
+                    <a class="deletes" data-id="{$_user['kam_id']}">删除</a> |
+                    <a class="operate" href="/user/adminRights?id=<?=$_user['kam_id']?>">权限</a>
                 </td>
-
             </tr>
             <?php endforeach; ?>
         </table>
@@ -63,3 +63,35 @@
         {$page}
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $(".deletes").on('click', function() {
+            var kamId = $(this).data('id');
+            layer.open({
+                content: "您确定要删除吗",
+                btn:['确认', '取消'],
+                shadeClose: false,
+                yes: function() {
+                    $.ajax({
+                        url: "<?php echo U('user/adminDelete')?>",
+                        type: "post",
+                        dataType: "json",
+                        data:{kamId: kamId},
+                        success: function(result) {
+                            if(result.status == 1) {
+                                layer.close();
+                                alert(result.msg);
+                                window.location.href = "<?php echo U('user/admin')?>";
+                            }else {
+                                alert('操作失败');
+                            }
+                        }
+                    })
+                },
+                no: function() {
+                    layer.close();
+                }
+            });
+        });
+    })
+</script>

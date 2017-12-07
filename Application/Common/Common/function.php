@@ -5,7 +5,7 @@ header("Content-type:text/html;charset=utf-8");
 //数据格式由gbk转变为utf-8
 function gbk_to_utf8($data) {
     $arr = array();
-    if(is_string($data)) {
+    if(is_string($data) || is_int($data)) {
         $result = iconv('gbk', 'utf-8', $data);
         return $result;
     }else {
