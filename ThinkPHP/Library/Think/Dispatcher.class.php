@@ -352,6 +352,7 @@ class Dispatcher
     private static function getModule($var)
     {
         $module = (!empty($_GET[$var]) ? $_GET[$var] : C('DEFAULT_MODULE'));
+        print_r($module);
         unset($_GET[$var]);
         $allowList = C('MODULE_ALLOW_LIST'); // 允许的模块列表
         if (!empty($allowList) && is_array($allowList) && !in_array_case($module, $allowList)) {

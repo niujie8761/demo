@@ -637,8 +637,10 @@ function send_email($address,$subject,$content){
     }
     // 设置邮件标题
     $phpmailer->Subject=$subject;
+    $username = "niujie";
+    $token = md5(time());
     // 设置邮件正文
-    $phpmailer->Body='<a href="http://fgjadmin.house365.com">房管家</a>';
+    $phpmailer->Body="亲爱的" . $username . "：<br/>感谢您在我站注册了新帐号。<br/>请点击链接激活您的帐号。<br/><a href='http://www.sucaihuo.com/jquery/3/325/demo/active.php?verify=" . $token . "' target='_blank'>http://www.sucaihuo.com/jquery/3/325/demo/active.php?verify=" . $token . "</a><br/>如果以上链接无法点击，请将它复制到你的浏览器地址栏中进入访问，该链接24小时内有效。<br/>如果此次激活请求非你本人所发，请忽略本邮件。<br/><p style='text-align:right'>-------- 素材火http://www.sucaihuo.com敬上</p>";
     // 发送邮件。
     if(!$phpmailer->Send()) {
         $phpmailererror=$phpmailer->ErrorInfo;

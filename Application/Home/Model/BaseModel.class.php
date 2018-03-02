@@ -96,14 +96,15 @@ class BaseModel extends Model{
      *
      * @param string $where
      * @param string $column
+     * @param string $fields
      * @return array|string
      */
-    public function selectData($where = '', $column = '') {
+    public function selectData($where = '', $column = '', $fields = '') {
         if ($where == '') {
             $data = $this->select();
             return gbk_to_utf8($data);
         } else {
-            $data = $this->where($where)->select();
+            $data = $this->where($where)->field($fields)->select();
             return $this->outPut($data, $column, 2);
         }
     }
@@ -135,8 +136,18 @@ class BaseModel extends Model{
         return gbk_to_utf8($data);
     }
 
-    public function pageData($where = "", $firstRow = "", $listRows="", $order="") {
-        $data = $this->where($where)->limit($firstRow, $listRows)->order($order)->select();
+    /**
+     * 分页
+     *
+     * @param string $where
+     * @param string $firstRow
+     * @param string $listRows
+     * @param string $order
+     * @param string $fields
+     * @return array|string
+     */
+    public function pageData($where = "", $firstRow = "", $listRows="", $order="", $fields = '') {
+        $data = $this->where($where)->field($fields)->limit($firstRow, $listRows)->order($order)->select();
         return gbk_to_utf8($data);
     }
 
