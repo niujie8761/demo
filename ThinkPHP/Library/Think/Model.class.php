@@ -930,7 +930,7 @@ class Model
                 $step = '-' . $step;
             }
         }
-        return $this->setField($field, array('exp', $field . '+' . $step));
+        return $this->setField($field, array('exp', "'".$field ."'". '+' . $step));
     }
 
     /**

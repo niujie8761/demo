@@ -13,6 +13,7 @@ class BaseModel extends Model{
 
     public static $instance = array();
 
+
     public static function getInstance($pre) {
         $preObj = 'Home\Model\\'.ucfirst($pre).'Model';
         if(is_null(self::$instance[$pre])) {

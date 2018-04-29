@@ -13,4 +13,11 @@ return array(
             'captcha_id'  => '77bc575e76b900bd1670886348223cc6',//极验id
             'private_key' => 'ceb3ccbed50e7ea8a967fb5af0122df3',//极验key
         ),
+        'AMQP' => array(
+            'host' => '127.0.0.1',
+            'port' => '5672',
+            'login' => 'guest',
+            'password' => 'guest',
+            'vhost'=>'/'
+        )
 );

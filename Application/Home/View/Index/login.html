@@ -87,7 +87,7 @@
             };
             // 验证是否通过
             $.post("<?php echo U('Home/Index/ajaxCheck') ?>", postData, function (data) {
-                if (data == 1) {
+                if (data == 0) {
                     $.post("<?php echo U('Home/Index/checkLogin')?>",{username:name, password:pass},function(result) {
                         if(result['status'] == 1) {
                             window.location.href =  "<?php echo U('Home/Index/index')?>";

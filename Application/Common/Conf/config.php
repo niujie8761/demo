@@ -12,7 +12,7 @@ return array(
     'SHOW_PAGE_TRACE'        => false,                           // 是否显示调试面板
    // 'URL_CASE_INSENSITIVE'   => false,                           // url区分大小写
     'TAGLIB_BUILD_IN'        => 'Cx,Common\Tag\My',              // 加载自定义标签
-    'LOAD_EXT_CONFIG'        => 'db,alipay,redis,oauth',               // 加载网站设置文件
+    'LOAD_EXT_CONFIG'        => 'db,alipay,redis,oauth,param',   // 加载网站设置文件
     'TMPL_PARSE_STRING'      => array(                           // 定义常用路径
         '__OSS__'            => OSS_URL,
         '__PUBLIC__'         => OSS_URL.__ROOT__.'/Public',
@@ -53,7 +53,7 @@ return array(
     'EMAIL_FROM_NAME'        => '杰哥',   // 发件人
     'EMAIL_SMTP'             => 'smtp.qq.com',   // smtp
     'EMAIL_USERNAME'         => '1033751979@qq.com',   // 账号
-    'EMAIL_PASSWORD'         => 'xnpkylhaqroabefi',   // 密码  注意: 163和QQ邮箱是授权码；不是登录的密码
+    'EMAIL_PASSWORD'         => 'ihrwqvwrsytebfhf',   // 密码  注意: 163和QQ邮箱是授权码；不是登录的密码
     'EMAIL_SMTP_SECURE'      => 'ssl',   // 链接方式 如果使用QQ邮箱；需要把此项改为  ssl
     'EMAIL_PORT'             => '465', // 端口 如果使用QQ邮箱；需要把此项改为  465
 //***********************************其他设置**********************************

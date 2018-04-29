@@ -89,6 +89,22 @@ class Redis extends Cache
     }
 
     /**
+     * 获取队列中的元素
+     *
+     * @param $name
+     * @param $start
+     * @param $end
+     * @param null $dbName
+     * @return array
+     */
+    public function setLRange($name, $start, $end, $dbName = null) {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        return $this->handler->lRange($this->formatKey($name), $start, $end);
+    }
+
+    /**
      * 从左边进入队列并根据名称自动切库
      *
      * @param $name
@@ -111,12 +127,12 @@ class Redis extends Cache
      * @param null $dbName
      * @return string
      */
-    public function setLPop($name,  $dbName = null)
+    public function setRPop($name,  $dbName = null)
     {
         if(!is_null($dbName)) {
             $this->switchDB($dbName);
         }
-        return $this->handler->lPop($this->formatKey($name));
+        return $this->handler->rPop($this->formatKey($name));
     }
 
     /**
@@ -143,6 +159,46 @@ class Redis extends Cache
      */
     public function setExpire($name, $expiration) {
         return $this->handler->expire($this->formatKey($name), $expiration);
+    }
+
+    /**
+     * 获取key的到期时间
+     *
+     * @param $name
+     * @return int
+     */
+    public function setTtl($name) {
+       return $this->handler->ttl($this->formatKey($name));
+    }
+
+    /**
+     * 集合中添加元素
+     *
+     * @param $name
+     * @param $value
+     * @param null $dbName
+     * @return int
+     */
+    public function setSAdd($name, $value, $dbName = null) {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        return $this->handler->sAdd($this->formatKey($name), $this->formatValue($value));
+    }
+
+
+    /**
+     * 返回集合中的所有成员
+     *
+     * @param $name
+     * @param $dbName
+     * @return array
+     */
+    public function setSMembers($name, $dbName = null) {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        return $this->handler->sMembers($this->formatKey($name));
     }
 
     /**

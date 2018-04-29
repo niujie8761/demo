@@ -39,7 +39,7 @@ class MyselfController  extends BaseController
             }
             $this->ajaxReturn($result);
         }else {
-            $this->display();
+            $this->display('myself/passwords');
         }
     }
 }
