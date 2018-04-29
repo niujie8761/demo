@@ -26,7 +26,7 @@ class TestController
         $num = 8;//红包数量
         $max = 30;//最大红包
         $min = 1;//最小红包
-        $flag = 1;
+        $flag = 1;//标记
         $tmp = array();
         $tmp['send_id'] = $sendId;
         $tmp['group_id'] = $groupId;
