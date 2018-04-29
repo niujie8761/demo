@@ -88,11 +88,6 @@ class IndexController extends BaseController
         /**
          * @var $agentM AgentModel
          */
-       /* $agentM = AgentModel::getInstance('agent');
-        $data['ag_code'] = '123456';
-        $data['ks_id'] = '123';
-        $agentM->addData($data);
-        exit;*/
         $this->display();
     }
 
