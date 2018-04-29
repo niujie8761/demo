@@ -121,6 +121,21 @@ class Redis extends Cache
     }
 
     /**
+     * 从右边弹出队列数据
+     *
+     * @param $name
+     * @param null $dbName
+     * @return string
+     */
+    public function setRPop($name, $dbName = null)
+    {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        return $this->handler->rpop($this->formatKey($name));
+    }
+
+    /**
      * 从左边弹出队列数据
      *
      * @param $name
@@ -134,6 +149,46 @@ class Redis extends Cache
         }
         return $this->handler->rPop($this->formatKey($name));
     }
+
+    /**
+     * 哈希赋值
+     *
+     * @param $name
+     * @param $value
+     * @param null $dbName
+     * @return bool
+     */
+    public function setHMSet($name, $value, $dbName = null)
+    {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        return $this->handler->hMset($this->formatKey($name), $value);
+    }
+
+    public function getHMGet($name, $hashKey, $dbName = null)
+    {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        return $this->handler->hMGet($this->formatKey($name), $hashKey);
+    }
+
+    /**
+     * 判断key存不存在
+     *
+     * @param $name
+     * @param null $dbName
+     * @return bool
+     */
+    public function exists($name, $dbName = null)
+    {
+        if(!is_null($dbName)) {
+            $this->switchDB($dbName);
+        }
+        return $this->handler->exists($this->formatKey($name));
+    }
+
 
     /**
      * 自增

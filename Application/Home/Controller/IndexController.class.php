@@ -7,9 +7,10 @@ use Home\Model\MangerModel;
 use Home\Model\CityModel;
 use Home\Model\MenuModel;
 use Think\Cache\Driver\Redis;
+use Think\Controller;
 use think\geetest\GeetestLib;
 
-class IndexController extends BaseController
+class IndexController extends Controller
 {
     public function login()
     {
@@ -159,6 +160,99 @@ class IndexController extends BaseController
         $this->redirect('Home/Index/index');
     }
 
+    //注册（1，判断redis/数据库中有没有该用户，没有的话的已hash形式写入redis，有的话提示）
+    public function register()
+    {
+        $username = $_REQUEST['username'];
+        $password = $_REQUEST['password'];
+        $redis = new Redis();
+        $key = 'user:queue';
+        $keyName = 'username:'.$username;
+        $res = $this->checkUserExist($keyName);
+        if($res['result'] == 1) {
+            echo '你已经注册过了';
+            exit;
+        }
+        //先写入redis缓存
+        $redis->setLPush($key, $keyName);
+        $uid = $redis->setInc($key.'id');
+        $userArr = array('username' => $username, 'password' => $password, 'uid' => $uid);
+        $redis->setHMSet($keyName, $userArr);
+
+    }
+    //登录
+    public function doLogin()
+    {
+        $username = $_REQUEST['username'];
+        $password = $_REQUEST['password'];
+        $keyName = 'username:'.$username;
+        $re = $this->checkUserExist($keyName);
+        if(!$re['result']) {
+            echo $re['msg'];
+            exit;
+        }
+        if($re['data']['password'] == $password) {
+            echo '登录成功';
+        }else {
+            echo '密码错误';
+        }
+        exit;
+    }
+
+    function checkUserExist($keyName)
+    {
+        $redis = new Redis();
+        $res = $redis->exists($keyName);
+        if(!$res) {
+            $sql = "select * from user where ";
+            $result = exec($sql);
+            if(!$result) {
+                return array(
+                    'result' => 0,
+                    'msg' => '该用户不存在',
+                    'data' => array()
+                );
+            }else {
+                return array(
+                    'result' => 1,
+                    'msg' => '用户存在',
+                    'data' => $result
+                );
+            }
+        }else {
+            $hashKey = array('username', 'password', 'uid');
+            $data = $redis->getHMGet($keyName, $hashKey);
+            return array(
+                'result' => 1,
+                'msg' => '用户存在',
+                'data' => $data
+            );
+        }
+    }
+    //同步redis到数据库
+    public function addUserToMysql()
+    {
+        $redis = new Redis();
+        $key = "user:queue";
+        while($value = $redis->setRPop($key)) {
+            $hashKey = array('username', 'password', 'uid');
+            $data = $redis->getHMGet($value, $hashKey);
+            $username = $data['username'];
+            $password = $data['password'];
+            $dsn = "mysql:host=192.168.105.146;dbname=jjrnew;charset=utf8";
+            $pdo = new \PDO($dsn, 'root', 'idontcare');
+
+            $sql = "insert into keeper_agent (ag_phone, password) value (:name, :pass)";
+            $smp = $pdo->prepare($sql);
+
+            echo $smp->execute([
+                'name' => $username,
+                'pass' => $password
+            ]);
+        }
+    }
+
+
     /**
      * 退出
      */
@@ -195,7 +289,7 @@ class IndexController extends BaseController
      * 发送邮件
      */
     public function send_email(){
-        $email=I('post.email');
+        $email=I('get.email');
         if ($email=='baijunyao@baijunyao.com') {
             die('请修改邮箱地址已接收测试邮件');
         }
@@ -203,7 +297,7 @@ class IndexController extends BaseController
         if ($result['error']==1) {
             p($result);die;
         }
-        $this->success('发送完成',U('Home/index/index'));
+        //$this->success('发送完成',U('Home/index/index'));
     }
 
     public function ajax_upload()
